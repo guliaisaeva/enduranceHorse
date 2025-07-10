@@ -9,7 +9,7 @@ function HeroSection() {
     const navigate = useNavigate();
     return (
         <div className="md:flex md:items-center md:justify-around  bg-no-repeat  bg-cover  bg-center"
-            style={{ backgroundImage: `url(${bgImage})`, height: 'calc(100vh - 95px)' }}>
+            style={{ backgroundImage: `url(${bgImage})`, height: '100vh' }}>
             <div className="container">
                 <div className="flex flex-col space-y-4 justify-center  text-white  w-[40%] text-center">
                     <h1 className="text-3xl md:text-4xl font-bold">YARIŞTAN ÖTE BİR TUTKU</h1>
@@ -18,8 +18,8 @@ function HeroSection() {
                         <button onClick={() => navigate("/live")} className="bg-red-600 w-40 hover:bg-red-700 px-5 py-2 rounded text-white  flex items-center justify-center gap-2">
                             <CiStreamOn size={24} /> Canlı İzle
                         </button>
-                        <button className="bg-[#0e9978]  w-40 hover:bg-teal-700 px-5 py-2 rounded">Gelecek Yarışlar</button>
-                        <button className="bg-gray-500  w-40 hover:bg-gray-700 px-5 py-2 rounded">Geçmiş Yarışlar</button>
+                        <button onClick={() => navigate("/events")} className="bg-[#0e9978]  w-40 hover:bg-teal-700 px-5 py-2 rounded">Gelecek Yarışlar</button>
+                        <button onClick={() => navigate("/events")} className="bg-gray-500  w-40 hover:bg-gray-700 px-5 py-2 rounded">Geçmiş Yarışlar</button>
                     </div>
                 </div>
                 <div className='w-[60%]'>

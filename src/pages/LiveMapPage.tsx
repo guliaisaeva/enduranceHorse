@@ -1,11 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { TbClockHour4Filled } from "react-icons/tb";
 import { FaBriefcaseMedical } from "react-icons/fa";
 import { FaBell } from "react-icons/fa6"
-import { GoogleMap, LoadScript, Marker, Polyline } from '@react-google-maps/api';
+import { GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
 import Modal from "../components/Modal";
 import TimingTable from "../components/TimingTable"
 import VetTable from "../components/VetTable";
+import flagIcon from '@/assets/images/flag.png';
+import blueFlagIcon from '@/assets/images/blueFlag.png';
+import maviIcon from '@/assets/images/mavi.png';
+import morIcon from '@/assets/images/mor.png';
+import sariIcon from '@/assets/images/sari.png';
 
 const mockRiders = [
     { id: 1, name: "Ahmet Yılmaz", horse: "Carolla", parkur: 1 },
@@ -15,6 +20,7 @@ const mockRiders = [
     { id: 5, name: "Josef", horse: "Snow", parkur: 5 },
     { id: 6, name: "Tom Klein", horse: "Roza", parkur: 1 }
 ].sort((a, b) => a.parkur - b.parkur);
+
 const getParkurColor = (parkur: number): string => {
     switch (parkur) {
         case 1:
@@ -32,11 +38,11 @@ const getParkurColor = (parkur: number): string => {
     }
 };
 const parkurColors: Record<number, { bg: string; text: string; stroke: string }> = {
-    1: { bg: "#FEF3C7", text: "#92400E", stroke: "#FBBF24" }, // sarı tonlar
-    2: { bg: "#DBEAFE", text: "#1E40AF", stroke: "#3B82F6" }, // mavi tonlar
-    3: { bg: "#FEE2E2", text: "#991B1B", stroke: "#EF4444" }, // kırmızı tonlar
-    4: { bg: "#E9D5FF", text: "#6B21A8", stroke: "#A78BFA" }, // mor tonlar
-    5: { bg: "#D1FAE5", text: "#065F46", stroke: "#10B981" }, // yeşil tonlar
+    1: { bg: "#FEF3C7", text: "#92400E", stroke: "#FBBF24" },
+    2: { bg: "#DBEAFE", text: "#1E40AF", stroke: "#3B82F6" },
+    3: { bg: "#FEE2E2", text: "#991B1B", stroke: "#EF4444" },
+    4: { bg: "#E9D5FF", text: "#6B21A8", stroke: "#A78BFA" },
+    5: { bg: "#D1FAE5", text: "#065F46", stroke: "#10B981" },
 };
 //google map 
 const containerStyle = {
@@ -110,47 +116,47 @@ const stations = [
     {
         position: { lat: 39.9260, lng: 32.8670 },
         title: "Yardım ve veteriner Noktası",
-        icon: '/public/flag.png',
+        icon: flagIcon,
         parkur: 1,
-
     },
     {
         position: { lat: 39.9270, lng: 32.8675 },
         title: "Su Noktası",
-        icon: '/public/blueFlag.png',
+        icon: blueFlagIcon,
         parkur: 1,
-
     },
     {
         position: { lat: 39.9267, lng: 32.8690 },
         title: "Duru Naz(Roza)",
-        icon: '/public/mavi.png',
+        icon: maviIcon,
         parkur: 2,
-
     },
     {
         position: { lat: 39.9255, lng: 32.8662 },
         title: "Binici Ahmet(ati Carollla)",
-        icon: '/public/mor.png',
+        icon: morIcon,
         parkur: 1,
-
     },
     {
         position: { lat: 39.9270, lng: 32.8680 },
         title: "Binici Ahmet(ati Carollla)",
-        icon: '/public/sari.png',
+        icon: sariIcon,
         parkur: 1,
-
     },
     {
-        position: { lat: 39.9255, lng: 32.8678 },
-        title: "Binici Ahmet(ati Carollla)",
-        icon: '/public/blueFlag.png',
+        position: { lat: 39.9270, lng: 32.8680 },
+        title: "Binici Nuri(ati Carol)",
+        icon: sariIcon,
         parkur: 3,
-
     },
-
+    {
+        position: { lat: 39.9259, lng: 32.8678 },
+        title: "Su istasyonu",
+        icon: blueFlagIcon,
+        parkur: 3,
+    },
 ];
+
 
 
 
@@ -158,37 +164,11 @@ export default function LiveMapPage() {
     const [selectedRiders, setSelectedRiders] = useState<number[]>([]);
     const [isVetOpen, setVetOpen] = useState(false);
     const [isTimingOpen, setTimingOpen] = useState(false);
-    const [googleMapInstance, setGoogleMapInstance] = useState<any>(null);
-
     const [visibleParkur, setVisibleParkur] = useState<number | null>(null);
-    const polylineRef = useRef<google.maps.Polyline | null>(null);
-    useEffect(() => {
-        // Eğer eski polyline varsa temizle
-        if (polylineRef.current) {
-            polylineRef.current.setMap(null);
-            polylineRef.current = null;
-        }
 
-        if (visibleParkur !== null && parkurPaths[visibleParkur] && googleMapInstance) {
-            const polyline = new googleMapInstance.maps.Polyline({
-                path: parkurPaths[visibleParkur],
-                strokeColor: parkurColors[visibleParkur].stroke,
-                strokeWeight: 4,
-            });
-            polyline.setMap(googleMapInstance.map); // haritaya ekle
-            polylineRef.current = polyline;
-        }
-
-        // Temizlik için return (isteğe bağlı)
-        return () => {
-            if (polylineRef.current) {
-                polylineRef.current.setMap(null);
-                polylineRef.current = null;
-            }
-        };
-    }, [visibleParkur, googleMapInstance]);
-
-
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: "AIzaSyDEe_sjdPYPJ46ad_Dfhmg3p6Ux8YMj5eM"
+    });
     const selectedParkurs = Array.from(new Set(
         mockRiders
             .filter(r => selectedRiders.includes(r.id))
@@ -203,18 +183,53 @@ export default function LiveMapPage() {
     };
 
     const onParkurClick = (parkur: number) => {
-        setVisibleParkur(null); // önce kaldır
-        setTimeout(() => {
-            setVisibleParkur(parkur); // sonra yeni parkur seç
-        }, 10); // 10ms delay yeterli
+        setVisibleParkur(parkur);
     };
+    useEffect(() => {
+        const selectedParkurs = mockRiders
+            .filter(r => selectedRiders.includes(r.id))
+            .map(r => r.parkur);
 
+        if (visibleParkur !== null && !selectedParkurs.includes(visibleParkur)) {
+            if (selectedParkurs.length > 0) {
+                setVisibleParkur(selectedParkurs[0]);
+            } else {
+                setVisibleParkur(null);
+            }
+        }
+    }, [selectedRiders]);
     return (
         <div className="text-white flex gap-3  flex-wrap p-3">
             <div className="w-full md:w-1/3  flex flex-col gap-6  overflow-y-auto">
 
+
+
                 <div className="bg-[#D9EDDF] p-4 rounded-md">
                     <div className="space-y-2">
+
+                        <div className="flex items-center gap-2 mb-3 pl-1">
+                            <input
+                                type="checkbox"
+                                className="accent-green-600 w-4 h-4"
+                                checked={selectedRiders.length === mockRiders.length}
+                                onChange={(e) => {
+                                    if (e.target.checked) {
+                                        setSelectedRiders(mockRiders.map(r => r.id));
+                                    } else {
+                                        setSelectedRiders([]);
+                                    }
+                                }}
+                                id="selectAll"
+                            />
+                            <label htmlFor="selectAll" className={`px-3 py-1 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200
+    ${selectedRiders.length === mockRiders.length
+                                    ? "bg-red-100 text-red-700 hover:bg-red-200"
+                                    : "bg-green-100 text-green-700 hover:bg-green-200"}
+  `}
+                            >
+                                {selectedRiders.length === mockRiders.length ? "Hepsini Kaldır" : "Hepsini Seç"}
+                            </label>
+                        </div>
                         {mockRiders.map((rider) => (
                             <div
                                 key={rider.id}
@@ -310,14 +325,14 @@ export default function LiveMapPage() {
                             </div>
                         );
                     })}</div>
-                <LoadScript googleMapsApiKey="AIzaSyDEe_sjdPYPJ46ad_Dfhmg3p6Ux8YMj5eM" >
-
+                {/* <LoadScript googleMapsApiKey="AIzaSyDEe_sjdPYPJ46ad_Dfhmg3p6Ux8YMj5eM" > */}
+                {/* 
                     <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15} onLoad={() => {
                         if (typeof window !== 'undefined' && window.google) {
                             setGoogleMapInstance(window.google);
                         }
-                    }}>
-                        {visibleParkur !== null && parkurPaths[visibleParkur] && (
+                    }}> */}
+                {/* {visibleParkur !== null && parkurPaths[visibleParkur] && (
                             <Polyline
                                 key={`polyline-${visibleParkur}`}
                                 path={parkurPaths[visibleParkur]}
@@ -341,9 +356,109 @@ export default function LiveMapPage() {
                                         scaledSize: new googleMapInstance.maps.Size(40, 40),
                                     }}
                                 />
-                            ))}
+                            ))} */}
+
+
+
+                {/* {visibleParkur !== null && (
+                            <>
+                                <Polyline
+                                    // key={`polyline-${visibleParkur}`}
+                                    path={parkurPaths[visibleParkur]}
+                                    options={{
+                                        strokeColor: parkurColors[visibleParkur].stroke,
+                                        strokeWeight: 4,
+                                    }}
+                                />
+
+                                {stations
+                                    .filter(station => station.parkur === visibleParkur)
+                                    .map((station, index) => (
+                                        <Marker
+                                            key={index}
+                                            position={station.position}
+                                            title={station.title}
+                                            icon={{
+                                                url: station.icon,
+                                                scaledSize: new google.maps.Size(40, 40),
+                                            }}
+                                        />
+                                    ))}
+                            </>
+                        )}
+                    </GoogleMap> */}
+                {/* </LoadScript> */}
+
+
+
+                {/* {isLoaded && (
+                    <GoogleMap
+                        mapContainerStyle={containerStyle}
+                        center={center}
+                        zoom={15}
+
+                    >
+                        {visibleParkur !== null && (
+                            <>
+                                <Polyline
+                                    path={parkurPaths[visibleParkur]}
+                                    options={{
+                                        strokeColor: parkurColors[visibleParkur].stroke,
+                                        strokeWeight: 4,
+                                    }}
+                                />
+                                {stations
+                                    .filter(station => station.parkur === visibleParkur)
+                                    .map((station, index) => (
+                                        <Marker
+                                            key={index}
+                                            position={station.position}
+                                            title={station.title}
+                                            icon={{
+                                                url: station.icon,
+                                                scaledSize: new google.maps.Size(40, 40),
+                                            }}
+                                        />
+                                    ))}
+                            </>
+                        )}
                     </GoogleMap>
-                </LoadScript>
+                )} */}
+
+
+
+                {isLoaded && (
+                    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+                        {visibleParkur !== null && parkurPaths[visibleParkur] && (
+                            <>
+                                <Polyline
+                                    path={parkurPaths[visibleParkur]}
+                                    options={{
+                                        strokeColor: parkurColors[visibleParkur].stroke,
+                                        strokeWeight: 4,
+                                    }}
+                                />
+                                {stations
+                                    .filter(station => station.parkur === visibleParkur)
+                                    .map((station, index) => {
+                                        const iconSize = new window.google.maps.Size(40, 40);
+                                        return (
+                                            <Marker
+                                                key={index}
+                                                position={station.position}
+                                                title={station.title}
+                                                icon={{
+                                                    url: station.icon,
+                                                    scaledSize: iconSize,
+                                                }}
+                                            />
+                                        );
+                                    })}
+                            </>
+                        )}
+                    </GoogleMap>
+                )}
+
             </div>
         </div>
     );

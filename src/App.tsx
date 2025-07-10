@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import Layout from './Layout'
 import Homepage from './pages/Homepage'
 import LiveMapPage from './pages/LiveMapPage'
+import EnduranceCardTable from './pages/EnduranceCardTable'
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/live" element={<LiveMapPage />} />
-          {/* other routes */}
+          <Route path="/events" element={<EnduranceCardTable />} />
         </Routes>
       </Layout>
     </>

@@ -27,10 +27,10 @@ function Navbar() {
                     Ana Sayfa
                 </Link>
                 <Link
-                    to="/yarislar"
+                    to="/events"
                     className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
                 >
-                    Yarışçılar
+                    Yarışlar
                 </Link>
                 <Link
                     to="/atlar"
