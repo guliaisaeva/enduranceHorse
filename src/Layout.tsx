@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
     return (
         <>
             <Navbar />
-            <main>{children}</main>
+            <main className="mx-auto">{children}</main>
         </>
     );
 };

@@ -11,6 +11,8 @@ import blueFlagIcon from '@/assets/images/blueFlag.png';
 import maviIcon from '@/assets/images/mavi.png';
 import morIcon from '@/assets/images/mor.png';
 import sariIcon from '@/assets/images/sari.png';
+import startIcon from '@/assets/images/start.svg';
+import finishIcon from '@/assets/images/finish.svg';
 
 const mockRiders = [
     { id: 1, name: "Ahmet Yılmaz", horse: "Carolla", parkur: 1 },
@@ -18,7 +20,8 @@ const mockRiders = [
     { id: 3, name: "Mert Demir", horse: "Roza", parkur: 3 },
     { id: 4, name: "Josef", horse: "Black", parkur: 4 },
     { id: 5, name: "Josef", horse: "Snow", parkur: 5 },
-    { id: 6, name: "Tom Klein", horse: "Roza", parkur: 1 }
+    { id: 6, name: "Tom Klein", horse: "Roza", parkur: 1 },
+    { id: 7, name: "Tomas Good", horse: "Lion", parkur: 6 }
 ].sort((a, b) => a.parkur - b.parkur);
 
 const getParkurColor = (parkur: number): string => {
@@ -33,6 +36,8 @@ const getParkurColor = (parkur: number): string => {
             return "bg-purple-100";
         case 5:
             return "bg-green-100";
+        case 6:
+            return "bg-orange-100";
         default:
             return "bg-gray-100";
     }
@@ -43,8 +48,8 @@ const parkurColors: Record<number, { bg: string; text: string; stroke: string }>
     3: { bg: "#FEE2E2", text: "#991B1B", stroke: "#EF4444" },
     4: { bg: "#E9D5FF", text: "#6B21A8", stroke: "#A78BFA" },
     5: { bg: "#D1FAE5", text: "#065F46", stroke: "#10B981" },
+    6: { bg: "#FFEDD5", text: "#9A3412", stroke: "#FB923C" },
 };
-//google map 
 const containerStyle = {
     width: '100%',
     height: '500px',
@@ -132,8 +137,8 @@ const stations = [
         parkur: 2,
     },
     {
-        position: { lat: 39.9255, lng: 32.8662 },
-        title: "Binici Ahmet(ati Carollla)",
+        position: { lat: 39.9255, lng: 32.8668 },
+        title: "Binici Mehmet(ati Carollla)",
         icon: morIcon,
         parkur: 1,
     },
@@ -165,6 +170,8 @@ export default function LiveMapPage() {
     const [isVetOpen, setVetOpen] = useState(false);
     const [isTimingOpen, setTimingOpen] = useState(false);
     const [visibleParkur, setVisibleParkur] = useState<number | null>(null);
+    const [activeTab, setActiveTab] = useState<'riders' | 'map'>('riders');
+
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyDEe_sjdPYPJ46ad_Dfhmg3p6Ux8YMj5eM"
@@ -200,265 +207,446 @@ export default function LiveMapPage() {
     }, [selectedRiders]);
     return (
         <div className="text-white flex gap-3  flex-wrap p-3">
-            <div className="w-full md:w-1/3  flex flex-col gap-6  overflow-y-auto">
-
-
-
-                <div className="bg-[#D9EDDF] p-4 rounded-md">
-                    <div className="space-y-2">
-
-                        <div className="flex items-center gap-2 mb-3 pl-1">
-                            <input
-                                type="checkbox"
-                                className="accent-green-600 w-4 h-4"
-                                checked={selectedRiders.length === mockRiders.length}
-                                onChange={(e) => {
-                                    if (e.target.checked) {
-                                        setSelectedRiders(mockRiders.map(r => r.id));
-                                    } else {
-                                        setSelectedRiders([]);
-                                    }
-                                }}
-                                id="selectAll"
-                            />
-                            <label htmlFor="selectAll" className={`px-3 py-1 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200
-    ${selectedRiders.length === mockRiders.length
-                                    ? "bg-red-100 text-red-700 hover:bg-red-200"
-                                    : "bg-green-100 text-green-700 hover:bg-green-200"}
-  `}
-                            >
-                                {selectedRiders.length === mockRiders.length ? "Hepsini Kaldır" : "Hepsini Seç"}
-                            </label>
-                        </div>
-                        {mockRiders.map((rider) => (
-                            <div
-                                key={rider.id}
-                                // className="flex items-center justify-between p-1 bg-white/90 rounded shadow-sm text-black hover:bg-white transition"
-                                style={{ backgroundColor: getParkurColor(rider.parkur) }}
-
-                                className={`flex items-center justify-between p-1 ${getParkurColor(rider.parkur)} rounded shadow-sm text-black hover:bg-white transition`}
-                                onDoubleClick={() => setTimingOpen(true)}   >
-                                <label className="flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedRiders.includes(rider.id)}
-                                        onChange={() => toggleRider(rider.id)}
-                                        className="accent-green-600 w-4 h-4"
-                                    />
-                                    <span className="font-medium">{rider.name} ({rider.horse})   <span className="text-amber-700 pl-2">Parkur{rider.parkur}</span> </span>
-                                </label>
-                                <div className="flex gap-1 justify-center items-center">
-
-                                    <button className="text-[#0da27e]  hover:text-[#376b60]">
-                                        <TbClockHour4Filled onClick={() => setTimingOpen(true)} size={19} title="Timing" />
-                                    </button>
-                                    <button className="text-red-500  hover:text-red-700">
-                                        <FaBriefcaseMedical onClick={() => setVetOpen(true)} size={18} title="Vet Kartı" />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <Modal
-                        isOpen={isVetOpen}
-                        onClose={() => setVetOpen(false)}
-                        title={<div className="flex justify-between items-center gap-4">
-                            <span>Veteriner Raporu </span>
-                            <span className="text-sm"> 🐎At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
-                        </div>}
-                    >
-                        <VetTable />
-                    </Modal>
-                    <Modal
-                        isOpen={isTimingOpen}
-                        onClose={() => setTimingOpen(false)}
-                        title={<div className="flex justify-between items-center gap-4">
-                            <span>Timing</span>
-                            <span className="text-sm">🐎 At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
-                        </div>}
-                    >
-                        <TimingTable />
-                    </Modal>
-
-                </div>
-
-                <div className="bg-[#FEA91D] p-4 rounded-md space-y-4 hidden sm:block">
-                    <p className="flex justify- start items-center gap-2"><FaBell /> ANLIK UYARILAR PANELİ</p>
-                    <p >Rota Dışı Bildirimi: <span className="text-red-600 font-extrabold">Yok</span> </p>
-                    <p> Anlık Uyarı: <span className="text-red-600 font-extrabold">Yok</span></p>
-
-                </div>
-
+            <div className="md:hidden flex justify-center gap-4 mb-4">
+                <button
+                    onClick={() => setActiveTab('riders')}
+                    className={`px-4 py-2 rounded ${activeTab === 'riders' ? 'bg-green-600 text-white' : 'bg-gray-200 text-black'}`}
+                >
+                    Riders
+                </button>
+                <button
+                    onClick={() => setActiveTab('map')}
+                    className={`px-4 py-2 rounded ${activeTab === 'map' ? 'bg-green-600 text-white' : 'bg-gray-200 text-black'}`}
+                >
+                    Map
+                </button>
             </div>
+            <div className="w-full md:hidden">
+                {activeTab === 'riders' && (
+                    <div className="w-full">
 
-            <div className="relative flex-1 flex items-center justify-center border-4 border-[#0da27e]  ">
-                <div className="absolute z-10 left-0 top-0 p-2 flex gap-1">
-                    {selectedParkurs.map((parkur) => {
-                        const bgColor = parkurColors[parkur]?.bg || '#f0f0f0';
-                        const textColor = visibleParkur === parkur ? parkurColors[parkur]?.text : '#333';
-                        const borderColor = visibleParkur === parkur ? parkurColors[parkur]?.stroke : 'transparent';
-                        const fontWeight = visibleParkur === parkur ? 'bold' : 'normal';
-                        const ridersInParkur = mockRiders
-                            .filter(r => r.parkur === parkur)
-                            .map(r => `${r.name} (${r.horse})`)
-                            .join(", ");
-                        return (
-                            <div
-                                key={parkur}
-                                onClick={() => onParkurClick(parkur)}
-                                style={{
-                                    backgroundColor: bgColor,
-                                    color: textColor,
-                                    border: `2px solid ${borderColor}`,
-                                    fontWeight,
-                                    cursor: 'pointer',
-                                    padding: '6px 12px',
-                                    borderRadius: '6px',
-                                    userSelect: 'none',
-                                    transition: 'all 0.3s ease',
-                                }}
-                                title={ridersInParkur || `Parkur ${parkur}`}
+                        <div className="w-full md:w-1/3  flex flex-col gap-6  overflow-y-auto">
+                            <div className="bg-[#D9EDDF] p-4 rounded-md">
+                                <div className="space-y-2">
 
-                            >
-                                Parkur {parkur}
+                                    <div className="flex items-center gap-2 mb-3 pl-1">
+                                        <input
+                                            type="checkbox"
+                                            className="accent-green-600 w-4 h-4"
+                                            checked={selectedRiders.length === mockRiders.length}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedRiders(mockRiders.map(r => r.id));
+                                                } else {
+                                                    setSelectedRiders([]);
+                                                }
+                                            }}
+                                            id="selectAll"
+                                        />
+                                        <label htmlFor="selectAll" className={`px-3 py-1 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200
+    ${selectedRiders.length === mockRiders.length
+                                                ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                                : "bg-white text-gray-700 hover:bg-gray-100"}`}
+                                        >
+                                            {selectedRiders.length === mockRiders.length ? "Hepsini Kaldır" : "Hepsini Seç"}
+                                        </label>
+                                    </div>
+                                    {mockRiders.map((rider) => (
+                                        <div
+                                            key={rider.id}
+                                            // className="flex items-center justify-between p-1 bg-white/90 rounded shadow-sm text-black hover:bg-white transition"
+                                            style={{ backgroundColor: getParkurColor(rider.parkur) }}
+
+                                            className={`flex items-center justify-between p-1 ${getParkurColor(rider.parkur)} rounded shadow-sm text-black hover:bg-white transition`}
+                                            onDoubleClick={() => setTimingOpen(true)}   >
+                                            <label className="flex items-center gap-2">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedRiders.includes(rider.id)}
+                                                    onChange={() => toggleRider(rider.id)}
+                                                    className="accent-green-600 w-4 h-4"
+                                                />
+                                                <span className="font-medium">{rider.name} ({rider.horse})   <span className="text-amber-700 pl-2">Parkur{rider.parkur}</span> </span>
+                                            </label>
+                                            <div className="flex gap-1 justify-center items-center">
+
+                                                <button className="text-[#0da27e]  hover:text-[#376b60]">
+                                                    <TbClockHour4Filled onClick={() => setTimingOpen(true)} size={19} title="Timing" />
+                                                </button>
+                                                <button className="text-red-500  hover:text-red-700">
+                                                    <FaBriefcaseMedical onClick={() => setVetOpen(true)} size={18} title="Vet Kartı" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <Modal
+                                    isOpen={isVetOpen}
+                                    onClose={() => setVetOpen(false)}
+                                    title={<div className="flex justify-between items-center gap-4">
+                                        <span>Veteriner Raporu </span>
+                                        <span className="text-sm"> 🐎At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                                    </div>}
+                                >
+                                    <VetTable />
+                                </Modal>
+                                <Modal
+                                    isOpen={isTimingOpen}
+                                    onClose={() => setTimingOpen(false)}
+                                    title={<div className="flex justify-between items-center gap-4">
+                                        <span>Timing</span>
+                                        <span className="text-sm">🐎 At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                                    </div>}
+                                >
+                                    <TimingTable />
+                                </Modal>
+
                             </div>
-                        );
-                    })}</div>
-                {/* <LoadScript googleMapsApiKey="AIzaSyDEe_sjdPYPJ46ad_Dfhmg3p6Ux8YMj5eM" > */}
-                {/* 
-                    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15} onLoad={() => {
-                        if (typeof window !== 'undefined' && window.google) {
-                            setGoogleMapInstance(window.google);
-                        }
-                    }}> */}
-                {/* {visibleParkur !== null && parkurPaths[visibleParkur] && (
-                            <Polyline
-                                key={`polyline-${visibleParkur}`}
-                                path={parkurPaths[visibleParkur]}
-                                options={{
-                                    strokeColor: parkurColors[visibleParkur].stroke,
-                                    strokeWeight: 4,
-                                }}
 
-                            />
-                        )}
+                            <div className="bg-[#FEA91D] p-4 rounded-md space-y-4 hidden sm:block">
+                                <p className="flex justify- start items-center gap-2"><FaBell /> ANLIK UYARILAR PANELİ</p>
+                                <p >Rota Dışı Bildirimi: <span className="text-red-600 font-extrabold">Yok</span> </p>
+                                <p> Anlık Uyarı: <span className="text-red-600 font-extrabold">Yok</span></p>
 
+                            </div>
 
-                        {visibleParkur !== null && googleMapInstance &&
-                            stations.filter(station => station.parkur === visibleParkur).map((station, index) => (
-                                <Marker
-                                    key={index}
-                                    position={station.position}
-                                    title={station.title}
-                                    icon={{
-                                        url: station.icon,
-                                        scaledSize: new googleMapInstance.maps.Size(40, 40),
-                                    }}
-                                />
-                            ))} */}
-
-
-
-                {/* {visibleParkur !== null && (
-                            <>
-                                <Polyline
-                                    // key={`polyline-${visibleParkur}`}
-                                    path={parkurPaths[visibleParkur]}
-                                    options={{
-                                        strokeColor: parkurColors[visibleParkur].stroke,
-                                        strokeWeight: 4,
-                                    }}
-                                />
-
-                                {stations
-                                    .filter(station => station.parkur === visibleParkur)
-                                    .map((station, index) => (
-                                        <Marker
-                                            key={index}
-                                            position={station.position}
-                                            title={station.title}
-                                            icon={{
-                                                url: station.icon,
-                                                scaledSize: new google.maps.Size(40, 40),
+                        </div>                    </div>
+                )}
+                {activeTab === 'map' && (
+                    <div className="w-full">
+                        <div className="relative flex-1 flex  justify-center border-4 border-[#0da27e]  ">
+                            <div className="absolute z-10 left-0 top-0 p-2 flex gap-1 flex-wrap  sm:text-xs sm:p-0.5">
+                                {selectedParkurs.map((parkur) => {
+                                    const bgColor = parkurColors[parkur]?.bg || '#f0f0f0';
+                                    const textColor = visibleParkur === parkur ? parkurColors[parkur]?.text : '#333';
+                                    const borderColor = visibleParkur === parkur ? parkurColors[parkur]?.stroke : 'transparent';
+                                    const fontWeight = visibleParkur === parkur ? 'bold' : 'normal';
+                                    const ridersInParkur = mockRiders
+                                        .filter(r => r.parkur === parkur)
+                                        .map(r => `${r.name} (${r.horse})`)
+                                        .join(", ");
+                                    return (
+                                        <div
+                                            key={parkur}
+                                            onClick={() => onParkurClick(parkur)}
+                                            style={{
+                                                backgroundColor: bgColor,
+                                                color: textColor,
+                                                border: `2px solid ${borderColor}`,
+                                                fontWeight,
+                                                cursor: 'pointer',
+                                                padding: '6px 12px',
+                                                borderRadius: '6px',
+                                                userSelect: 'none',
+                                                transition: 'all 0.3s ease',
                                             }}
-                                        />
-                                    ))}
-                            </>
-                        )}
-                    </GoogleMap> */}
-                {/* </LoadScript> */}
+                                            className="cursor-pointer select-none transition-all ease-in-out duration-300 rounded-md
+                                px-3 py-1.5 text-sm sm:px-6 sm:py-3 sm:text-base"
+
+                                            title={ridersInParkur || `Parkur ${parkur}`}
+
+                                        >
+                                            Parkur {parkur}
+                                        </div>
+                                    );
+                                })}</div>
 
 
 
-                {/* {isLoaded && (
-                    <GoogleMap
-                        mapContainerStyle={containerStyle}
-                        center={center}
-                        zoom={15}
 
-                    >
-                        {visibleParkur !== null && (
-                            <>
-                                <Polyline
-                                    path={parkurPaths[visibleParkur]}
-                                    options={{
-                                        strokeColor: parkurColors[visibleParkur].stroke,
-                                        strokeWeight: 4,
-                                    }}
-                                />
-                                {stations
-                                    .filter(station => station.parkur === visibleParkur)
-                                    .map((station, index) => (
-                                        <Marker
-                                            key={index}
-                                            position={station.position}
-                                            title={station.title}
-                                            icon={{
-                                                url: station.icon,
-                                                scaledSize: new google.maps.Size(40, 40),
-                                            }}
-                                        />
-                                    ))}
-                            </>
-                        )}
-                    </GoogleMap>
-                )} */}
-
-
-
-                {isLoaded && (
-                    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
-                        {visibleParkur !== null && parkurPaths[visibleParkur] && (
-                            <>
-                                <Polyline
-                                    path={parkurPaths[visibleParkur]}
-                                    options={{
-                                        strokeColor: parkurColors[visibleParkur].stroke,
-                                        strokeWeight: 4,
-                                    }}
-                                />
-                                {stations
-                                    .filter(station => station.parkur === visibleParkur)
-                                    .map((station, index) => {
-                                        const iconSize = new window.google.maps.Size(40, 40);
-                                        return (
-                                            <Marker
-                                                key={index}
-                                                position={station.position}
-                                                title={station.title}
-                                                icon={{
-                                                    url: station.icon,
-                                                    scaledSize: iconSize,
+                            {isLoaded && (
+                                <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+                                    {visibleParkur !== null && parkurPaths[visibleParkur] && (
+                                        <>
+                                            <Polyline
+                                                path={parkurPaths[visibleParkur]}
+                                                options={{
+                                                    strokeColor: parkurColors[visibleParkur].stroke,
+                                                    strokeWeight: 4,
                                                 }}
                                             />
-                                        );
-                                    })}
-                            </>
-                        )}
-                    </GoogleMap>
-                )}
 
+                                            {(() => {
+                                                const path = parkurPaths[visibleParkur];
+                                                const start = path[0];
+                                                const finish = path[path.length - 1];
+                                                const isSameLocation = start.lat === finish.lat && start.lng === finish.lng;
+
+                                                return (
+                                                    <>
+                                                        {/* Always show the start marker */}
+                                                        <Marker
+                                                            position={start}
+                                                            title="Start"
+                                                            icon={{
+                                                                url: startIcon,
+                                                                scaledSize: new window.google.maps.Size(40, 40),
+                                                            }}
+                                                        />
+
+                                                        {/* Show finish marker if finish is at a different location */}
+                                                        {!isSameLocation && (
+                                                            <Marker
+                                                                position={finish}
+                                                                title="Finish"
+                                                                icon={{
+                                                                    url: finishIcon,
+                                                                    scaledSize: new window.google.maps.Size(40, 40),
+                                                                }}
+                                                            />
+                                                        )}
+
+                                                        {/* If same location, optionally show second marker slightly offset so it’s visible */}
+                                                        {isSameLocation && (
+                                                            <Marker
+                                                                position={{ lat: finish.lat + 0.00005, lng: finish.lng + 0.00005 }}
+                                                                title="Finish (offset)"
+                                                                icon={{
+                                                                    url: finishIcon,
+                                                                    scaledSize: new window.google.maps.Size(40, 40),
+                                                                }}
+                                                            />
+                                                        )}
+                                                    </>
+                                                );
+                                            })()}
+
+                                            {stations
+                                                .filter(station => station.parkur === visibleParkur)
+                                                .map((station, index) => {
+                                                    const iconSize = new window.google.maps.Size(40, 40);
+                                                    return (
+                                                        <Marker
+                                                            key={index}
+                                                            position={station.position}
+                                                            title={station.title}
+                                                            icon={{
+                                                                url: station.icon,
+                                                                scaledSize: iconSize,
+                                                            }}
+                                                        />
+                                                    );
+                                                })}
+                                        </>
+                                    )}
+                                </GoogleMap>
+                            )}
+
+                        </div>                    </div>
+                )}
+            </div>
+
+
+            <div className="hidden md:flex w-full gap-3">
+
+                <div className="w-full md:w-1/3  flex flex-col gap-6  overflow-y-auto">
+                    <div className="bg-[#D9EDDF] p-4 rounded-md">
+                        <div className="space-y-2">
+
+                            <div className="flex items-center gap-2 mb-3 pl-1">
+                                <input
+                                    type="checkbox"
+                                    className="accent-green-600 w-4 h-4"
+                                    checked={selectedRiders.length === mockRiders.length}
+                                    onChange={(e) => {
+                                        if (e.target.checked) {
+                                            setSelectedRiders(mockRiders.map(r => r.id));
+                                        } else {
+                                            setSelectedRiders([]);
+                                        }
+                                    }}
+                                    id="selectAll"
+                                />
+                                <label htmlFor="selectAll" className={`px-3 py-1 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200
+    ${selectedRiders.length === mockRiders.length
+                                        ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                                        : "bg-white text-gray-700 hover:bg-gray-100"}`}
+                                >
+                                    {selectedRiders.length === mockRiders.length ? "Hepsini Kaldır" : "Hepsini Seç"}
+                                </label>
+                            </div>
+                            {mockRiders.map((rider) => (
+                                <div
+                                    key={rider.id}
+                                    // className="flex items-center justify-between p-1 bg-white/90 rounded shadow-sm text-black hover:bg-white transition"
+                                    style={{ backgroundColor: getParkurColor(rider.parkur) }}
+
+                                    className={`flex items-center justify-between p-1 ${getParkurColor(rider.parkur)} rounded shadow-sm text-black hover:bg-white transition`}
+                                    onDoubleClick={() => setTimingOpen(true)}   >
+                                    <label className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedRiders.includes(rider.id)}
+                                            onChange={() => toggleRider(rider.id)}
+                                            className="accent-green-600 w-4 h-4"
+                                        />
+                                        <span className="font-medium">{rider.name} ({rider.horse})   <span className="text-amber-700 pl-2">Parkur{rider.parkur}</span> </span>
+                                    </label>
+                                    <div className="flex gap-1 justify-center items-center">
+
+                                        <button className="text-[#0da27e]  hover:text-[#376b60]">
+                                            <TbClockHour4Filled onClick={() => setTimingOpen(true)} size={19} title="Timing" />
+                                        </button>
+                                        <button className="text-red-500  hover:text-red-700">
+                                            <FaBriefcaseMedical onClick={() => setVetOpen(true)} size={18} title="Vet Kartı" />
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <Modal
+                            isOpen={isVetOpen}
+                            onClose={() => setVetOpen(false)}
+                            title={<div className="flex justify-between items-center gap-4">
+                                <span>Veteriner Raporu </span>
+                                <span className="text-sm"> 🐎At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                            </div>}
+                        >
+                            <VetTable />
+                        </Modal>
+                        <Modal
+                            isOpen={isTimingOpen}
+                            onClose={() => setTimingOpen(false)}
+                            title={<div className="flex justify-between items-center gap-4">
+                                <span>Timing</span>
+                                <span className="text-sm">🐎 At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                            </div>}
+                        >
+                            <TimingTable />
+                        </Modal>
+
+                    </div>
+
+                    <div className="bg-[#FEA91D] p-4 rounded-md space-y-4 hidden sm:block">
+                        <p className="flex justify- start items-center gap-2"><FaBell /> ANLIK UYARILAR PANELİ</p>
+                        <p >Rota Dışı Bildirimi: <span className="text-red-600 font-extrabold">Yok</span> </p>
+                        <p> Anlık Uyarı: <span className="text-red-600 font-extrabold">Yok</span></p>
+
+                    </div>
+
+                </div>
+
+                <div className="relative flex-1 flex  justify-center border-4 border-[#0da27e]  ">
+                    <div className="absolute z-10 left-0 top-0 p-2 flex gap-1 flex-wrap  sm:text-xs sm:p-0.5">
+                        {selectedParkurs.map((parkur) => {
+                            const bgColor = parkurColors[parkur]?.bg || '#f0f0f0';
+                            const textColor = visibleParkur === parkur ? parkurColors[parkur]?.text : '#333';
+                            const borderColor = visibleParkur === parkur ? parkurColors[parkur]?.stroke : 'transparent';
+                            const fontWeight = visibleParkur === parkur ? 'bold' : 'normal';
+                            const ridersInParkur = mockRiders
+                                .filter(r => r.parkur === parkur)
+                                .map(r => `${r.name} (${r.horse})`)
+                                .join(", ");
+                            return (
+                                <div
+                                    key={parkur}
+                                    onClick={() => onParkurClick(parkur)}
+                                    style={{
+                                        backgroundColor: bgColor,
+                                        color: textColor,
+                                        border: `2px solid ${borderColor}`,
+                                        fontWeight,
+                                        cursor: 'pointer',
+                                        padding: '6px 12px',
+                                        borderRadius: '6px',
+                                        userSelect: 'none',
+                                        transition: 'all 0.3s ease',
+                                    }}
+                                    className="cursor-pointer select-none transition-all ease-in-out duration-300 rounded-md
+                                px-3 py-1.5 text-sm sm:px-6 sm:py-3 sm:text-base"
+
+                                    title={ridersInParkur || `Parkur ${parkur}`}
+
+                                >
+                                    Parkur {parkur}
+                                </div>
+                            );
+                        })}</div>
+
+
+
+
+                    {isLoaded && (
+                        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+                            {visibleParkur !== null && parkurPaths[visibleParkur] && (
+                                <>
+                                    <Polyline
+                                        path={parkurPaths[visibleParkur]}
+                                        options={{
+                                            strokeColor: parkurColors[visibleParkur].stroke,
+                                            strokeWeight: 4,
+                                        }}
+                                    />
+
+                                    {(() => {
+                                        const path = parkurPaths[visibleParkur];
+                                        const start = path[0];
+                                        const finish = path[path.length - 1];
+                                        const isSameLocation = start.lat === finish.lat && start.lng === finish.lng;
+
+                                        return (
+                                            <>
+                                                {/* Always show the start marker */}
+                                                <Marker
+                                                    position={start}
+                                                    title="Start"
+                                                    icon={{
+                                                        url: startIcon,
+                                                        scaledSize: new window.google.maps.Size(40, 40),
+                                                    }}
+                                                />
+
+                                                {/* Show finish marker if finish is at a different location */}
+                                                {!isSameLocation && (
+                                                    <Marker
+                                                        position={finish}
+                                                        title="Finish"
+                                                        icon={{
+                                                            url: finishIcon,
+                                                            scaledSize: new window.google.maps.Size(40, 40),
+                                                        }}
+                                                    />
+                                                )}
+
+                                                {/* If same location, optionally show second marker slightly offset so it’s visible */}
+                                                {isSameLocation && (
+                                                    <Marker
+                                                        position={{ lat: finish.lat + 0.00005, lng: finish.lng + 0.00005 }}
+                                                        title="Finish (offset)"
+                                                        icon={{
+                                                            url: finishIcon,
+                                                            scaledSize: new window.google.maps.Size(40, 40),
+                                                        }}
+                                                    />
+                                                )}
+                                            </>
+                                        );
+                                    })()}
+
+                                    {stations
+                                        .filter(station => station.parkur === visibleParkur)
+                                        .map((station, index) => {
+                                            const iconSize = new window.google.maps.Size(40, 40);
+                                            return (
+                                                <Marker
+                                                    key={index}
+                                                    position={station.position}
+                                                    title={station.title}
+                                                    icon={{
+                                                        url: station.icon,
+                                                        scaledSize: iconSize,
+                                                    }}
+                                                />
+                                            );
+                                        })}
+                                </>
+                            )}
+                        </GoogleMap>
+                    )}
+
+                </div>
             </div>
         </div>
     );
