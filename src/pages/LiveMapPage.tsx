@@ -207,7 +207,7 @@ export default function LiveMapPage() {
     }, [selectedRiders]);
     return (
         <div className="text-white flex gap-3  flex-wrap p-3">
-            <div className="md:hidden flex justify-center gap-4 mb-4">
+            {/* <div className="md:hidden flex justify-center gap-4 mb-4">
                 <button
                     onClick={() => setActiveTab('riders')}
                     className={`px-4 py-2 rounded ${activeTab === 'riders' ? 'bg-green-600 text-white' : 'bg-gray-200 text-black'}`}
@@ -220,6 +220,29 @@ export default function LiveMapPage() {
                 >
                     Map
                 </button>
+            </div> */}
+
+            <div className="md:hidden flex justify-center w-full gap-2 mb-4">
+                <div className="inline-flex bg-gray-200 rounded-full p-1 transition-colors duration-300 shadow">
+                    <button
+                        onClick={() => setActiveTab('riders')}
+                        className={`px-4 py-2 rounded-full transition-all duration-300 text-sm font-medium ${activeTab === 'riders'
+                            ? 'bg-[#0EA07C] text-white shadow'
+                            : 'text-gray-700'
+                            }`}
+                    >
+                        Riders
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('map')}
+                        className={`px-4 py-2 rounded-full transition-all duration-300 text-sm font-medium ${activeTab === 'map'
+                            ? 'bg-[#0EA07C] text-white shadow'
+                            : 'text-gray-700'
+                            }`}
+                    >
+                        Map
+                    </button>
+                </div>
             </div>
             <div className="w-full md:hidden">
                 {activeTab === 'riders' && (
@@ -266,7 +289,7 @@ export default function LiveMapPage() {
                                                     onChange={() => toggleRider(rider.id)}
                                                     className="accent-green-600 w-4 h-4"
                                                 />
-                                                <span className="font-medium">{rider.name} ({rider.horse})   <span className="text-amber-700 pl-2">Parkur{rider.parkur}</span> </span>
+                                                <span className="text-sm md:text-xs">{rider.name} ({rider.horse})   <span className="text-amber-700 pl-2">Parkur{rider.parkur}</span> </span>
                                             </label>
                                             <div className="flex gap-1 justify-center items-center">
 
