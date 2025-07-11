@@ -15,13 +15,14 @@ import startIcon from '@/assets/images/start.svg';
 import finishIcon from '@/assets/images/finish.svg';
 
 const mockRiders = [
-    { id: 1, name: "Ahmet Yılmaz", horse: "Carolla", parkur: 1 },
-    { id: 2, name: "Zeynep Kara", horse: "Black", parkur: 2 },
-    { id: 3, name: "Mert Demir", horse: "Roza", parkur: 3 },
-    { id: 4, name: "Josef", horse: "Black", parkur: 4 },
-    { id: 5, name: "Josef", horse: "Snow", parkur: 5 },
-    { id: 6, name: "Tom Klein", horse: "Roza", parkur: 1 },
-    { id: 7, name: "Tomas Good", horse: "Lion", parkur: 6 }
+    { id: 1, name: "Ahmet Yılmaz", horse: "Carolla", parkur: 1, position: { lat: 39.9270, lng: 32.8680 }, icon: maviIcon },
+    { id: 2, name: "Zeynep Kara", horse: "Black", parkur: 2, position: { lat: 39.9267, lng: 32.8690 }, icon: sariIcon },
+    { id: 3, name: "Mert Demir", horse: "Roza", parkur: 2, position: { lat: 39.9270, lng: 32.8671 }, icon: morIcon },
+    { id: 3, name: "Mert Demir", horse: "Roza", parkur: 3, position: { lat: 39.9270, lng: 32.8680 }, icon: sariIcon },
+    { id: 4, name: "Josef", horse: "Black", parkur: 4, position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
+    { id: 5, name: "Josef", horse: "Snow", parkur: 5, position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
+    { id: 6, name: "Tom Klein", horse: "Roza", parkur: 1, position: { lat: 39.9255, lng: 32.8668 }, icon: maviIcon },
+    { id: 7, name: "Tomas Good", horse: "Lion", parkur: 6, position: { lat: 39.9255, lng: 32.8668 }, icon: sariIcon }
 ].sort((a, b) => a.parkur - b.parkur);
 
 const getParkurColor = (parkur: number): string => {
@@ -56,8 +57,17 @@ const containerStyle = {
 };
 
 const center = {
-    lat: 39.925533,
-    lng: 32.866287,
+    lat: 39.926500,
+    lng: 32.867287,
+};
+
+const getPathCenter = (path: { lat: number; lng: number }[]) => {
+    const latSum = path.reduce((sum, point) => sum + point.lat, 0);
+    const lngSum = path.reduce((sum, point) => sum + point.lng, 0);
+    return {
+        lat: latSum / path.length,
+        lng: lngSum / path.length,
+    };
 };
 
 const parkurPaths: Record<number, { lat: number; lng: number }[]> = {
@@ -130,30 +140,30 @@ const stations = [
         icon: blueFlagIcon,
         parkur: 1,
     },
-    {
-        position: { lat: 39.9267, lng: 32.8690 },
-        title: "Duru Naz(Roza)",
-        icon: maviIcon,
-        parkur: 2,
-    },
-    {
-        position: { lat: 39.9255, lng: 32.8668 },
-        title: "Binici Mehmet(ati Carollla)",
-        icon: morIcon,
-        parkur: 1,
-    },
-    {
-        position: { lat: 39.9270, lng: 32.8680 },
-        title: "Binici Ahmet(ati Carollla)",
-        icon: sariIcon,
-        parkur: 1,
-    },
-    {
-        position: { lat: 39.9270, lng: 32.8680 },
-        title: "Binici Nuri(ati Carol)",
-        icon: sariIcon,
-        parkur: 3,
-    },
+    // {
+    //     position: { lat: 39.9267, lng: 32.8690 },
+    //     title: "Duru Naz(Roza)",
+    //     icon: maviIcon,
+    //     parkur: 2,
+    // },
+    // {
+    //     position: { lat: 39.9255, lng: 32.8668 },
+    //     title: "Binici Mehmet(ati Carollla)",
+    //     icon: morIcon,
+    //     parkur: 1,
+    // },
+    // {
+    //     position: { lat: 39.9270, lng: 32.8680 },
+    //     title: "Binici Ahmet(ati Carollla)",
+    //     icon: sariIcon,
+    //     parkur: 1,
+    // },
+    // {
+    //     position: { lat: 39.9270, lng: 32.8680 },
+    //     title: "Binici Nuri(ati Carol)",
+    //     icon: sariIcon,
+    //     parkur: 3,
+    // },
     {
         position: { lat: 39.9259, lng: 32.8678 },
         title: "Su istasyonu",
@@ -207,21 +217,6 @@ export default function LiveMapPage() {
     }, [selectedRiders]);
     return (
         <div className="text-white flex gap-3  flex-wrap p-3">
-            {/* <div className="md:hidden flex justify-center gap-4 mb-4">
-                <button
-                    onClick={() => setActiveTab('riders')}
-                    className={`px-4 py-2 rounded ${activeTab === 'riders' ? 'bg-green-600 text-white' : 'bg-gray-200 text-black'}`}
-                >
-                    Riders
-                </button>
-                <button
-                    onClick={() => setActiveTab('map')}
-                    className={`px-4 py-2 rounded ${activeTab === 'map' ? 'bg-green-600 text-white' : 'bg-gray-200 text-black'}`}
-                >
-                    Map
-                </button>
-            </div> */}
-
             <div className="md:hidden flex justify-center w-full gap-2 mb-4">
                 <div className="inline-flex bg-gray-200 rounded-full p-1 transition-colors duration-300 shadow">
                     <button
@@ -307,9 +302,9 @@ export default function LiveMapPage() {
                                 <Modal
                                     isOpen={isVetOpen}
                                     onClose={() => setVetOpen(false)}
-                                    title={<div className="flex justify-between items-center gap-4">
-                                        <span>Veteriner Raporu </span>
-                                        <span className="text-sm"> 🐎At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                                    title={<div className="flex justify-between items-center gap-4 text-sm md:text-base">
+                                        <span className="font-bold">Veteriner Raporu </span>
+                                        <span className="text-xs md:text-sm"> 🐎At:Carolla 🆔 At No:1245  <span className="hidden md:block">🏇Binici:Ahmet Yılmaz 🏷️ Takım: Kayseri Riders 🏆 2</span> </span>
                                     </div>}
                                 >
                                     <VetTable />
@@ -318,8 +313,8 @@ export default function LiveMapPage() {
                                     isOpen={isTimingOpen}
                                     onClose={() => setTimingOpen(false)}
                                     title={<div className="flex justify-between items-center gap-4">
-                                        <span>Timing</span>
-                                        <span className="text-sm">🐎 At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                                        <span className="font-bold">Timing</span>
+                                        <span className="text-xs md:text-sm"> 🐎At:Carolla 🆔 At No:1245  <span className="hidden md:block">🏇Binici:Ahmet Yılmaz 🏷️ Takım: Kayseri Riders 🏆 2</span> </span>
                                     </div>}
                                 >
                                     <TimingTable />
@@ -379,7 +374,11 @@ export default function LiveMapPage() {
 
 
                             {isLoaded && (
-                                <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+                                <GoogleMap mapContainerStyle={containerStyle} center={
+                                    visibleParkur && parkurPaths[visibleParkur]
+                                        ? getPathCenter(parkurPaths[visibleParkur])
+                                        : center
+                                } zoom={16}>
                                     {visibleParkur !== null && parkurPaths[visibleParkur] && (
                                         <>
                                             <Polyline
@@ -398,7 +397,6 @@ export default function LiveMapPage() {
 
                                                 return (
                                                     <>
-                                                        {/* Always show the start marker */}
                                                         <Marker
                                                             position={start}
                                                             title="Start"
@@ -408,7 +406,6 @@ export default function LiveMapPage() {
                                                             }}
                                                         />
 
-                                                        {/* Show finish marker if finish is at a different location */}
                                                         {!isSameLocation && (
                                                             <Marker
                                                                 position={finish}
@@ -420,7 +417,6 @@ export default function LiveMapPage() {
                                                             />
                                                         )}
 
-                                                        {/* If same location, optionally show second marker slightly offset so it’s visible */}
                                                         {isSameLocation && (
                                                             <Marker
                                                                 position={{ lat: finish.lat + 0.00005, lng: finish.lng + 0.00005 }}
@@ -435,22 +431,33 @@ export default function LiveMapPage() {
                                                 );
                                             })()}
 
+                                            {mockRiders
+                                                .filter(r => selectedRiders.includes(r.id) && r.parkur === visibleParkur)
+                                                .map(rider => (
+                                                    <Marker
+                                                        key={`rider-${rider.id}`}
+                                                        position={rider.position}
+                                                        title={`${rider.name} (${rider.horse})`}
+                                                        icon={{
+                                                            url: rider.icon,
+                                                            scaledSize: new window.google.maps.Size(40, 40),
+                                                        }}
+                                                    />
+                                                ))}
+
                                             {stations
                                                 .filter(station => station.parkur === visibleParkur)
-                                                .map((station, index) => {
-                                                    const iconSize = new window.google.maps.Size(40, 40);
-                                                    return (
-                                                        <Marker
-                                                            key={index}
-                                                            position={station.position}
-                                                            title={station.title}
-                                                            icon={{
-                                                                url: station.icon,
-                                                                scaledSize: iconSize,
-                                                            }}
-                                                        />
-                                                    );
-                                                })}
+                                                .map((station, index) => (
+                                                    <Marker
+                                                        key={`station-${index}`}
+                                                        position={station.position}
+                                                        title={station.title}
+                                                        icon={{
+                                                            url: station.icon,
+                                                            scaledSize: new window.google.maps.Size(40, 40),
+                                                        }}
+                                                    />
+                                                ))}
                                         </>
                                     )}
                                 </GoogleMap>
@@ -461,6 +468,8 @@ export default function LiveMapPage() {
             </div>
 
 
+
+            {/* web  görünüm */}
             <div className="hidden md:flex w-full gap-3">
 
                 <div className="w-full md:w-1/3  flex flex-col gap-6  overflow-y-auto">
@@ -592,7 +601,11 @@ export default function LiveMapPage() {
 
 
                     {isLoaded && (
-                        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+                        <GoogleMap mapContainerStyle={containerStyle} center={
+                            visibleParkur && parkurPaths[visibleParkur]
+                                ? getPathCenter(parkurPaths[visibleParkur])
+                                : center
+                        } zoom={17}>
                             {visibleParkur !== null && parkurPaths[visibleParkur] && (
                                 <>
                                     <Polyline
@@ -605,13 +618,13 @@ export default function LiveMapPage() {
 
                                     {(() => {
                                         const path = parkurPaths[visibleParkur];
+                                        if (!path || path.length === 0) return null;
                                         const start = path[0];
-                                        const finish = path[path.length - 1];
+                                        const finish = path[path.length - 1]
                                         const isSameLocation = start.lat === finish.lat && start.lng === finish.lng;
 
                                         return (
                                             <>
-                                                {/* Always show the start marker */}
                                                 <Marker
                                                     position={start}
                                                     title="Start"
@@ -621,7 +634,6 @@ export default function LiveMapPage() {
                                                     }}
                                                 />
 
-                                                {/* Show finish marker if finish is at a different location */}
                                                 {!isSameLocation && (
                                                     <Marker
                                                         position={finish}
@@ -633,7 +645,6 @@ export default function LiveMapPage() {
                                                     />
                                                 )}
 
-                                                {/* If same location, optionally show second marker slightly offset so it’s visible */}
                                                 {isSameLocation && (
                                                     <Marker
                                                         position={{ lat: finish.lat + 0.00005, lng: finish.lng + 0.00005 }}
@@ -648,7 +659,7 @@ export default function LiveMapPage() {
                                         );
                                     })()}
 
-                                    {stations
+                                    {/* {stations
                                         .filter(station => station.parkur === visibleParkur)
                                         .map((station, index) => {
                                             const iconSize = new window.google.maps.Size(40, 40);
@@ -663,7 +674,35 @@ export default function LiveMapPage() {
                                                     }}
                                                 />
                                             );
-                                        })}
+                                        })} */}
+
+                                    {mockRiders
+                                        .filter(r => selectedRiders.includes(r.id) && r.parkur === visibleParkur)
+                                        .map(rider => (
+                                            <Marker
+                                                key={`rider-${rider.id}`}
+                                                position={rider.position}
+                                                title={`${rider.name} (${rider.horse})`}
+                                                icon={{
+                                                    url: rider.icon,
+                                                    scaledSize: new window.google.maps.Size(40, 40),
+                                                }}
+                                            />
+                                        ))}
+
+                                    {stations
+                                        .filter(station => station.parkur === visibleParkur)
+                                        .map((station, index) => (
+                                            <Marker
+                                                key={`station-${index}`}
+                                                position={station.position}
+                                                title={station.title}
+                                                icon={{
+                                                    url: station.icon,
+                                                    scaledSize: new window.google.maps.Size(40, 40),
+                                                }}
+                                            />
+                                        ))}
                                 </>
                             )}
                         </GoogleMap>

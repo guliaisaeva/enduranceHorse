@@ -1,3 +1,4 @@
+import { FaCalendarAlt } from "react-icons/fa";
 
 const events = [
     {
@@ -43,16 +44,26 @@ export default function EnduranceCardTable() {
         <div className="max-w-7xl mx-auto p-4">
             {/* Başlık */}
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold">Endurance Horse Turkiye</h1>
-                <p className="text-sm uppercase tracking-widest text-gray-600">
+                {/* <h1 className="text-3xl font-bold">Endurance Horse Turkiye</h1> */}
+                {/* <p className="text-sm uppercase tracking-widest text-gray-600">
                     TURKISH EQUESTRIAN FEDERATION
-                </p>
-                <p className="text-xs text-gray-400 mt-1">FEI CERTIFIED SERVICE PROVIDER</p>
-                <div className="flex justify-center space-x-8 mt-4 text-sm text-[#118e6f] font-semibold uppercase cursor-pointer">
-                    <span>ATHLETES</span>
-                    <span>HORSES</span>
-                    <span>CLUBS</span>
-                    <span className="material-icons">calendar_today</span>
+                </p> */}
+                {/* <p className="text-xs text-gray-400 mt-1">FEI CERTIFIED SERVICE PROVIDER</p> */}
+                <div className="flex justify-center space-x-8 mt-4 text-sm md:text-base text-[#118e6f] font-semibold uppercase cursor-pointer">
+                    {["ATHLETES", "HORSES", "CLUBS"].map((item, index) => (
+                        <span
+                            key={index}
+                            className="relative group"
+                        >
+                            <span className="group-hover:border-b-2 border-[#FEA91D] transition-all duration-300">
+                                {item}
+                            </span>
+                        </span>
+                    ))}
+                    <span className="relative group">
+                        <FaCalendarAlt className="group-hover:text-[#FEA91D] transition-colors duration-300" />
+                        <span className="sr-only">Calendar</span>
+                    </span>
                 </div>
             </div>
 
@@ -68,11 +79,9 @@ export default function EnduranceCardTable() {
                                 alt={event.title}
                                 className="w-full h-40 object-cover"
                             />
-                            {/* Sol üst status ve gün bilgisi */}
                             <div className="absolute top-2 left-2 bg-green-700 text-white text-xs font-bold px-2 rounded">
                                 {event.status} - {event.daysLeft}d
                             </div>
-                            {/* Tarih kutucuğu */}
                             <div className="absolute bottom-2 left-2 bg-green-900 text-white text-xs px-2 py-0.5 rounded">
                                 {event.date}
                             </div>
@@ -81,7 +90,7 @@ export default function EnduranceCardTable() {
                         <div className="p-3 text-center">
                             <h3 className="font-semibold text-gray-800 mb-1">{event.title}</h3>
                             <p className="text-xs text-gray-500 mb-2">{event.description}</p>
-                            <button className="bg-[#0DA27E] text-white py-1 px-6 rounded hover:bg-blue-800 transition">
+                            <button className="bg-[#0DA27E] text-white py-1 px-6 rounded  hover:bg-amber-600  transition">
                                 View
                             </button>
                             <p className="text-xs text-gray-400 mt-2">{event.location}</p>
@@ -95,8 +104,8 @@ export default function EnduranceCardTable() {
                 <button className="hover:underline">Next &raquo;</button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-            {events.map((event, idx) => (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                {events.map((event, idx) => (
                     <div
                         key={idx}
                         className="border border-blue-400 rounded-md overflow-hidden shadow-md hover:shadow-xl transition-shadow bg-white"
@@ -107,12 +116,10 @@ export default function EnduranceCardTable() {
                                 alt={event.title}
                                 className="w-full h-40 object-cover"
                             />
-                            {/* Sol üst status ve gün bilgisi */}
-                            <div className="absolute top-2 left-2 bg-green-700 text-white text-xs font-bold px-2 rounded">
-                                {event.status} - {event.daysLeft}d
+                            <div className="absolute top-2 left-2 bg-amber-600 text-white text-xs font-bold px-2 rounded">
+                                RESULT - {event.daysLeft}d
                             </div>
-                            {/* Tarih kutucuğu */}
-                            <div className="absolute bottom-2 left-2 bg-green-900 text-white text-xs px-2 py-0.5 rounded">
+                            <div className="absolute bottom-2 left-2 bg-amber-600 text-white text-xs px-2 py-0.5 rounded">
                                 {event.date}
                             </div>
                         </div>
@@ -120,7 +127,7 @@ export default function EnduranceCardTable() {
                         <div className="p-3 text-center">
                             <h3 className="font-semibold text-gray-800 mb-1">{event.title}</h3>
                             <p className="text-xs text-gray-500 mb-2">{event.description}</p>
-                            <button className="bg-[#0DA27E] text-white py-1 px-6 rounded hover:bg-blue-800 transition">
+                            <button className="bg-[#0DA27E]  text-white py-1 px-6 rounded  hover:bg-amber-600 transition">
                                 View
                             </button>
                             <p className="text-xs text-gray-400 mt-2">{event.location}</p>

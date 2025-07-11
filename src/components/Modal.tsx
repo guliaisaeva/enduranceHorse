@@ -53,10 +53,10 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-lg w-[95%] max-w-5xl max-h-[90vh] overflow-auto p-4 sm:p-6"
+        className="bg-white rounded-lg shadow-lg w-[95%] max-w-5xl max-h-[90vh]  p-4 sm:p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4 ">
           <h2 className="text-lg sm:text-xl font-semibold text-black">{title}</h2>
           <button
             onClick={onClose}
@@ -66,7 +66,7 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
           </button>
         </div>
 
-        <div>{children}</div>
+        <div className=" overflow-auto">{children}</div>
       </div>
     </div>
   );
