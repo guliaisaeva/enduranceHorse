@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TbClockHour4Filled } from "react-icons/tb";
-import { FaBriefcaseMedical } from "react-icons/fa";
+import { FaBriefcaseMedical, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { FaBell } from "react-icons/fa6"
 import { GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
 import Modal from "../components/Modal";
@@ -13,17 +13,18 @@ import morIcon from '@/assets/images/mor.png';
 import sariIcon from '@/assets/images/sari.png';
 import startIcon from '@/assets/images/start.svg';
 import finishIcon from '@/assets/images/finish.svg';
+import { useLocation } from "react-router-dom";
 
 const mockRiders = [
-    { id: 1, name: "Ahmet Yılmaz", horse: "Carolla", parkur: 1, position: { lat: 39.9270, lng: 32.8680 }, icon: maviIcon },
-    { id: 2, name: "Zeynep Kara", horse: "Black", parkur: 2, position: { lat: 39.9267, lng: 32.8690 }, icon: sariIcon },
-    { id: 3, name: "Mert Demir", horse: "Roza", parkur: 2, position: { lat: 39.9270, lng: 32.8671 }, icon: morIcon },
-    { id: 3, name: "Mert Demir", horse: "Roza", parkur: 3, position: { lat: 39.9270, lng: 32.8680 }, icon: sariIcon },
-    { id: 4, name: "Josef", horse: "Black", parkur: 4, position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
-    { id: 5, name: "Josef", horse: "Snow", parkur: 5, position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
-    { id: 6, name: "Tom Klein", horse: "Roza", parkur: 1, position: { lat: 39.9255, lng: 32.8668 }, icon: maviIcon },
-    { id: 7, name: "Tomas Good", horse: "Lion", parkur: 6, position: { lat: 39.9255, lng: 32.8668 }, icon: sariIcon }
-].sort((a, b) => a.parkur - b.parkur);
+    { id: 1, name: "Ahmet Yılmaz", horse: "Carolla", parkur: 1, category: "CEA0* 80", position: { lat: 39.9270, lng: 32.8680 }, icon: maviIcon },
+    { id: 2, name: "Zeynep Kara", horse: "Black", parkur: 2, category: "CEA-P 60", position: { lat: 39.9267, lng: 32.8690 }, icon: sariIcon },
+    { id: 3, name: "Mert Demir", horse: "Roza", parkur: 2, category: "CENYJ1* 80", position: { lat: 39.9270, lng: 32.8671 }, icon: morIcon },
+    { id: 4, name: "Murat Ay", horse: "Roza", parkur: 3, category: "CEA-P 40", position: { lat: 39.9270, lng: 32.8680 }, icon: sariIcon },
+    { id: 5, name: "Josef", horse: "Black", parkur: 4, category: "CEA-I 20", position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
+    { id: 6, name: "Josef", horse: "Snow", parkur: 5, category: "CEN1* 80", position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
+    { id: 7, name: "Tom Klein", horse: "Roza", parkur: 1, category: "CEA0* 80", position: { lat: 39.9255, lng: 32.8668 }, icon: maviIcon },
+    { id: 8, name: "Tomas Good", horse: "Lion", parkur: 6, category: "CEA-P 60", position: { lat: 39.9255, lng: 32.8668 }, icon: sariIcon }
+].sort((a, b) => a.parkur - b.parkur)
 
 const getParkurColor = (parkur: number): string => {
     switch (parkur) {
@@ -140,30 +141,7 @@ const stations = [
         icon: blueFlagIcon,
         parkur: 1,
     },
-    // {
-    //     position: { lat: 39.9267, lng: 32.8690 },
-    //     title: "Duru Naz(Roza)",
-    //     icon: maviIcon,
-    //     parkur: 2,
-    // },
-    // {
-    //     position: { lat: 39.9255, lng: 32.8668 },
-    //     title: "Binici Mehmet(ati Carollla)",
-    //     icon: morIcon,
-    //     parkur: 1,
-    // },
-    // {
-    //     position: { lat: 39.9270, lng: 32.8680 },
-    //     title: "Binici Ahmet(ati Carollla)",
-    //     icon: sariIcon,
-    //     parkur: 1,
-    // },
-    // {
-    //     position: { lat: 39.9270, lng: 32.8680 },
-    //     title: "Binici Nuri(ati Carol)",
-    //     icon: sariIcon,
-    //     parkur: 3,
-    // },
+
     {
         position: { lat: 39.9259, lng: 32.8678 },
         title: "Su istasyonu",
@@ -176,13 +154,15 @@ const stations = [
 
 
 export default function LiveMapPage() {
+    const location = useLocation();
+    const event = location.state;
     const [selectedRiders, setSelectedRiders] = useState<number[]>([]);
     const [isVetOpen, setVetOpen] = useState(false);
     const [isTimingOpen, setTimingOpen] = useState(false);
     const [visibleParkur, setVisibleParkur] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'riders' | 'map'>('riders');
-
-
+    const [categoryIndex, setCategoryIndex] = useState(0);
+    const selectedCategory = event.category[categoryIndex];
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyDEe_sjdPYPJ46ad_Dfhmg3p6Ux8YMj5eM"
     });
@@ -191,6 +171,17 @@ export default function LiveMapPage() {
             .filter(r => selectedRiders.includes(r.id))
             .map(r => r.parkur)
     ));
+
+    const filteredRiders = mockRiders.filter(rider => rider.category === selectedCategory);
+    const handlePrev = () => {
+        setCategoryIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    };
+
+    const handleNext = () => {
+        setCategoryIndex((prev) =>
+            prev < event.category.length - 1 ? prev + 1 : prev
+        );
+    };
 
 
     const toggleRider = (id: number) => {
@@ -215,6 +206,13 @@ export default function LiveMapPage() {
             }
         }
     }, [selectedRiders]);
+    useEffect(() => {
+        setSelectedRiders([]);
+    }, [categoryIndex]);
+
+    if (!event) {
+        return <p className="text-center mt-10">Etkinlik bulunamadı.</p>;
+    }
     return (
         <div className="text-white flex gap-3  flex-wrap p-3">
             <div className="md:hidden flex justify-center w-full gap-2 mb-4">
@@ -471,11 +469,41 @@ export default function LiveMapPage() {
 
             {/* web  görünüm */}
             <div className="hidden md:flex w-full gap-3">
-
                 <div className="w-full md:w-1/3  flex flex-col gap-6  overflow-y-auto">
                     <div className="bg-[#D9EDDF] p-4 rounded-md">
-                        <div className="space-y-2">
+                        <div className="space-y-">
+                            <div className="text-center">
+                                <h3 className="font-semibold text-gray-800 p-2 text-center">{event.title}</h3>
+                                <div className="text-xs text-gray-500 mb-2 flex gap-2 justify-center items-center"><span>{event.date}</span> {event.location} <img className="border rounded-full h-8 w-8" src={event.flagImageUrL} alt="spain flag" /> </div>
+                                <p className="text-xs text-gray-400 m-1 "></p>
+                            </div>
 
+                            <div className="text-black flex justify-center items-center gap-2 pb-2">
+                                <button onClick={handlePrev} disabled={categoryIndex === 0}>
+                                    <FaCaretLeft
+                                        className={`text-xl ${categoryIndex === 0
+                                            ? "opacity-30 cursor-not-allowed"
+                                            : "cursor-pointer"
+                                            }`}
+                                    />
+                                </button>
+
+                                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium min-w-[80px] text-center">
+                                    {event.category[categoryIndex]}
+                                </span>
+
+                                <button
+                                    onClick={handleNext}
+                                    disabled={categoryIndex === event.category.length - 1}
+                                >
+                                    <FaCaretRight
+                                        className={`text-xl ${categoryIndex === event.category.length - 1
+                                            ? "opacity-30 cursor-not-allowed"
+                                            : "cursor-pointer"
+                                            }`}
+                                    />
+                                </button>
+                            </div>
                             <div className="flex items-center gap-2 mb-3 pl-1">
                                 <input
                                     type="checkbox"
@@ -498,7 +526,7 @@ export default function LiveMapPage() {
                                     {selectedRiders.length === mockRiders.length ? "Hepsini Kaldır" : "Hepsini Seç"}
                                 </label>
                             </div>
-                            {mockRiders.map((rider) => (
+                            {filteredRiders.map((rider) => (
                                 <div
                                     key={rider.id}
                                     // className="flex items-center justify-between p-1 bg-white/90 rounded shadow-sm text-black hover:bg-white transition"
@@ -560,7 +588,7 @@ export default function LiveMapPage() {
 
                 </div>
 
-                <div className="relative flex-1 flex  justify-center border-4 border-[#0da27e]  ">
+                <div className="relative flex-1 flex  justify-center border-4 border-[#0da27e] ">
                     <div className="absolute z-10 left-0 top-0 p-2 flex gap-1 flex-wrap  sm:text-xs sm:p-0.5">
                         {selectedParkurs.map((parkur) => {
                             const bgColor = parkurColors[parkur]?.bg || '#f0f0f0';
@@ -601,11 +629,13 @@ export default function LiveMapPage() {
 
 
                     {isLoaded && (
-                        <GoogleMap mapContainerStyle={containerStyle} center={
-                            visibleParkur && parkurPaths[visibleParkur]
-                                ? getPathCenter(parkurPaths[visibleParkur])
-                                : center
-                        } zoom={17}>
+
+                        <GoogleMap mapContainerStyle={{ width: '100%', height: '100%' }}
+                            center={
+                                visibleParkur && parkurPaths[visibleParkur]
+                                    ? getPathCenter(parkurPaths[visibleParkur])
+                                    : center
+                            } zoom={17}>
                             {visibleParkur !== null && parkurPaths[visibleParkur] && (
                                 <>
                                     <Polyline
@@ -706,6 +736,7 @@ export default function LiveMapPage() {
                                 </>
                             )}
                         </GoogleMap>
+
                     )}
 
                 </div>
