@@ -26,7 +26,7 @@ function HeroSection() {
                             Canlı İzle
                         </CustomButton>
                         <CustomButton
-                            onClick={() => navigate("/events")}
+                            onClick={() => navigate("/upcoming-event")}
                             className="bg-[#0e9978] w-full md:w-40 hover:bg-teal-700 text-white"
                         >
                             Gelecek Yarışlar

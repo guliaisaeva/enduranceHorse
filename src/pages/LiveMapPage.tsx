@@ -236,7 +236,7 @@ export default function LiveMapPage() {
     const [visibleParkur, setVisibleParkur] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'riders' | 'map'>('riders');
     const [categoryIndex, setCategoryIndex] = useState(0);
-    const selectedCategory = event.category[categoryIndex];
+    const selectedCategory = event?.category[categoryIndex];
     const [activeRider, setActiveRider] = useState<{
         id: number;
         name: string;
@@ -379,7 +379,7 @@ export default function LiveMapPage() {
                                             id="selectAll"
                                         />
                                         <label htmlFor="selectAll" className={`px-3 py-1 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200
-    ${selectedRiders.length === filteredRiders.length && filteredRiders.length > 0
+                                               ${selectedRiders.length === filteredRiders.length && filteredRiders.length > 0
                                                 ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
                                                 : "bg-white text-gray-700 hover:bg-gray-100"}`}
                                         >
@@ -391,7 +391,6 @@ export default function LiveMapPage() {
                                             key={rider.id}
                                             // className="flex items-center justify-between p-1 bg-white/90 rounded shadow-sm text-black hover:bg-white transition"
                                             style={{ backgroundColor: getParkurColor(rider.parkur) }}
-
                                             className={`flex items-center justify-between p-1 ${getParkurColor(rider.parkur)} rounded shadow-sm text-black hover:bg-white transition`}
                                             onDoubleClick={() => {
                                                 setActiveRider(rider);

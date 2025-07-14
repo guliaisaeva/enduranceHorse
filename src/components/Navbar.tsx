@@ -27,7 +27,7 @@ function Navbar() {
                     Ana Sayfa
                 </Link>
                 <Link
-                    to="/events"
+                    to="/all-events"
                     className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
                 >
                     Yarışlar
