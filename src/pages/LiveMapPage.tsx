@@ -16,15 +16,88 @@ import finishIcon from '@/assets/images/finish.svg';
 import { useLocation } from "react-router-dom";
 
 const mockRiders = [
-    { id: 1, name: "Ahmet Yılmaz", horse: "Carolla", parkur: 1, category: "CEA0* 80", position: { lat: 39.9270, lng: 32.8680 }, icon: maviIcon },
-    { id: 2, name: "Zeynep Kara", horse: "Black", parkur: 2, category: "CEA-P 60", position: { lat: 39.9267, lng: 32.8690 }, icon: sariIcon },
-    { id: 3, name: "Mert Demir", horse: "Roza", parkur: 2, category: "CENYJ1* 80", position: { lat: 39.9270, lng: 32.8671 }, icon: morIcon },
-    { id: 4, name: "Murat Ay", horse: "Roza", parkur: 3, category: "CEA-P 40", position: { lat: 39.9270, lng: 32.8680 }, icon: sariIcon },
-    { id: 5, name: "Josef", horse: "Black", parkur: 4, category: "CEA-I 20", position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
-    { id: 6, name: "Josef", horse: "Snow", parkur: 5, category: "CEN1* 80", position: { lat: 39.9255, lng: 32.8668 }, icon: morIcon },
-    { id: 7, name: "Tom Klein", horse: "Roza", parkur: 1, category: "CEA0* 80", position: { lat: 39.9255, lng: 32.8668 }, icon: maviIcon },
-    { id: 8, name: "Tomas Good", horse: "Lion", parkur: 6, category: "CEA-P 60", position: { lat: 39.9255, lng: 32.8668 }, icon: sariIcon }
-].sort((a, b) => a.parkur - b.parkur)
+    {
+        id: 1,
+        name: "Ahmet Yılmaz",
+        horse: "Carolla",
+        parkur: 1,
+        category: "CEA0* 80",
+        club: "Kayseri Riders",
+        position: { lat: 39.9270, lng: 32.8680 },
+        icon: maviIcon
+    },
+    {
+        id: 2,
+        name: "Zeynep Kara",
+        horse: "Black",
+        parkur: 2,
+        category: "CEA-P 60",
+        club: "Ankara Endurance",
+        position: { lat: 39.9267, lng: 32.8690 },
+        icon: sariIcon
+    },
+    {
+        id: 3,
+        name: "Mert Demir",
+        horse: "Roza",
+        parkur: 2,
+        category: "CENYJ1* 80",
+        club: "İstanbul Atlıspor",
+        position: { lat: 39.9270, lng: 32.8671 },
+        icon: morIcon
+    },
+    {
+        id: 4,
+        name: "Murat Ay",
+        horse: "Roza",
+        parkur: 3,
+        category: "CEA-P 40",
+        club: "Bursa Binicilik",
+        position: { lat: 39.9270, lng: 32.8680 },
+        icon: sariIcon
+    },
+    {
+        id: 5,
+        name: "Josef",
+        horse: "Black",
+        parkur: 4,
+        category: "CEA-I 20",
+        club: "Global Riders",
+        position: { lat: 39.9255, lng: 32.8668 },
+        icon: morIcon
+    },
+    {
+        id: 6,
+        name: "Josef",
+        horse: "Snow",
+        parkur: 5,
+        category: "CEN1* 80",
+        club: "Global Riders",
+        position: { lat: 39.9255, lng: 32.8668 },
+        icon: morIcon
+    },
+    {
+        id: 7,
+        name: "Tom Klein",
+        horse: "Roza",
+        parkur: 1,
+        category: "CEA0* 80",
+        club: "European Equestrian Club",
+        position: { lat: 39.9255, lng: 32.8668 },
+        icon: maviIcon
+    },
+    {
+        id: 8,
+        name: "Tomas Good",
+        horse: "Lion",
+        parkur: 6,
+        category: "CEA-P 60",
+        club: "European Equestrian Club",
+        position: { lat: 39.9255, lng: 32.8668 },
+        icon: sariIcon
+    }
+].sort((a, b) => a.parkur - b.parkur);
+
 
 const getParkurColor = (parkur: number): string => {
     switch (parkur) {
@@ -159,10 +232,21 @@ export default function LiveMapPage() {
     const [selectedRiders, setSelectedRiders] = useState<number[]>([]);
     const [isVetOpen, setVetOpen] = useState(false);
     const [isTimingOpen, setTimingOpen] = useState(false);
+
     const [visibleParkur, setVisibleParkur] = useState<number | null>(null);
     const [activeTab, setActiveTab] = useState<'riders' | 'map'>('riders');
     const [categoryIndex, setCategoryIndex] = useState(0);
     const selectedCategory = event.category[categoryIndex];
+    const [activeRider, setActiveRider] = useState<{
+        id: number;
+        name: string;
+        horse: string;
+        parkur: number;
+        category: string;
+        club: string;
+        position: { lat: number; lng: number };
+        icon: string;
+    } | null>(null);
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: "AIzaSyDEe_sjdPYPJ46ad_Dfhmg3p6Ux8YMj5eM"
     });
@@ -245,14 +329,49 @@ export default function LiveMapPage() {
                             <div className="bg-[#D9EDDF] p-4 rounded-md">
                                 <div className="space-y-2">
 
+                                    <div className="text-center">
+                                        <h3 className="font-semibold text-gray-800 p-2 text-center">{event.title}</h3>
+                                        <div className="text-xs text-gray-500 mb-2 flex gap-2 justify-center items-center"><span>{event.date}</span> {event.location} <img className="border rounded-full h-8 w-8" src={event.flagImageUrL} alt="spain flag" /> </div>
+                                        <p className="text-xs text-gray-400 m-1 "></p>
+                                    </div>
+
+                                    <div className="text-black flex justify-center items-center gap-2 pb-2">
+                                        <button onClick={handlePrev} disabled={categoryIndex === 0}>
+                                            <FaCaretLeft
+                                                className={`text-xl ${categoryIndex === 0
+                                                    ? "opacity-30 cursor-not-allowed"
+                                                    : "cursor-pointer"
+                                                    }`}
+                                            />
+                                        </button>
+
+                                        <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium min-w-[80px] text-center">
+                                            {event.category[categoryIndex]}
+                                        </span>
+
+                                        <button
+                                            onClick={handleNext}
+                                            disabled={categoryIndex === event.category.length - 1}
+                                        >
+                                            <FaCaretRight
+                                                className={`text-xl ${categoryIndex === event.category.length - 1
+                                                    ? "opacity-30 cursor-not-allowed"
+                                                    : "cursor-pointer"
+                                                    }`}
+                                            />
+                                        </button>
+                                    </div>
+
+
+
                                     <div className="flex items-center gap-2 mb-3 pl-1">
                                         <input
                                             type="checkbox"
                                             className="accent-green-600 w-4 h-4"
-                                            checked={selectedRiders.length === mockRiders.length}
+                                            checked={selectedRiders.length === filteredRiders.length && filteredRiders.length > 0}
                                             onChange={(e) => {
                                                 if (e.target.checked) {
-                                                    setSelectedRiders(mockRiders.map(r => r.id));
+                                                    setSelectedRiders(filteredRiders.map(r => r.id));
                                                 } else {
                                                     setSelectedRiders([]);
                                                 }
@@ -260,21 +379,24 @@ export default function LiveMapPage() {
                                             id="selectAll"
                                         />
                                         <label htmlFor="selectAll" className={`px-3 py-1 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200
-    ${selectedRiders.length === mockRiders.length
+    ${selectedRiders.length === filteredRiders.length && filteredRiders.length > 0
                                                 ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
                                                 : "bg-white text-gray-700 hover:bg-gray-100"}`}
                                         >
-                                            {selectedRiders.length === mockRiders.length ? "Hepsini Kaldır" : "Hepsini Seç"}
+                                            {selectedRiders.length === filteredRiders.length && filteredRiders.length > 0 ? "Hepsini Kaldır" : "Hepsini Seç"}
                                         </label>
                                     </div>
-                                    {mockRiders.map((rider) => (
+                                    {filteredRiders.map((rider) => (
                                         <div
                                             key={rider.id}
                                             // className="flex items-center justify-between p-1 bg-white/90 rounded shadow-sm text-black hover:bg-white transition"
                                             style={{ backgroundColor: getParkurColor(rider.parkur) }}
 
                                             className={`flex items-center justify-between p-1 ${getParkurColor(rider.parkur)} rounded shadow-sm text-black hover:bg-white transition`}
-                                            onDoubleClick={() => setTimingOpen(true)}   >
+                                            onDoubleClick={() => {
+                                                setActiveRider(rider);
+                                                setTimingOpen(true);
+                                            }}   >
                                             <label className="flex items-center gap-2">
                                                 <input
                                                     type="checkbox"
@@ -287,10 +409,16 @@ export default function LiveMapPage() {
                                             <div className="flex gap-1 justify-center items-center">
 
                                                 <button className="text-[#0da27e]  hover:text-[#376b60]">
-                                                    <TbClockHour4Filled onClick={() => setTimingOpen(true)} size={19} title="Timing" />
+                                                    <TbClockHour4Filled onClick={() => {
+                                                        setActiveRider(rider);
+                                                        setTimingOpen(true);
+                                                    }} size={19} title="Timing" />
                                                 </button>
                                                 <button className="text-red-500  hover:text-red-700">
-                                                    <FaBriefcaseMedical onClick={() => setVetOpen(true)} size={18} title="Vet Kartı" />
+                                                    <FaBriefcaseMedical onClick={() => {
+                                                        setActiveRider(rider);
+                                                        setVetOpen(true);
+                                                    }} size={18} title="Vet Kartı" />
                                                 </button>
                                             </div>
                                         </div>
@@ -302,7 +430,7 @@ export default function LiveMapPage() {
                                     onClose={() => setVetOpen(false)}
                                     title={<div className="flex justify-between items-center gap-4 text-sm md:text-base">
                                         <span className="font-bold">Veteriner Raporu </span>
-                                        <span className="text-xs md:text-sm"> 🐎At:Carolla 🆔 At No:1245  <span className="hidden md:block">🏇Binici:Ahmet Yılmaz 🏷️ Takım: Kayseri Riders 🏆 2</span> </span>
+                                        <span className="text-xs md:text-sm"> 🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}  <span className="hidden md:block">🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} Phase{activeRider?.parkur}</span> </span>
                                     </div>}
                                 >
                                     <VetTable />
@@ -312,7 +440,7 @@ export default function LiveMapPage() {
                                     onClose={() => setTimingOpen(false)}
                                     title={<div className="flex justify-between items-center gap-4">
                                         <span className="font-bold">Timing</span>
-                                        <span className="text-xs md:text-sm"> 🐎At:Carolla 🆔 At No:1245  <span className="hidden md:block">🏇Binici:Ahmet Yılmaz 🏷️ Takım: Kayseri Riders 🏆 2</span> </span>
+                                        <span className="text-xs md:text-sm"> 🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}  <span className="hidden md:block">🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} Phase{activeRider?.parkur}</span> </span>
                                     </div>}
                                 >
                                     <TimingTable />
@@ -471,7 +599,7 @@ export default function LiveMapPage() {
             <div className="hidden md:flex w-full gap-3">
                 <div className="w-full md:w-1/3  flex flex-col gap-6  overflow-y-auto">
                     <div className="bg-[#D9EDDF] p-4 rounded-md">
-                        <div className="space-y-">
+                        <div className="space-y-2">
                             <div className="text-center">
                                 <h3 className="font-semibold text-gray-800 p-2 text-center">{event.title}</h3>
                                 <div className="text-xs text-gray-500 mb-2 flex gap-2 justify-center items-center"><span>{event.date}</span> {event.location} <img className="border rounded-full h-8 w-8" src={event.flagImageUrL} alt="spain flag" /> </div>
@@ -488,7 +616,7 @@ export default function LiveMapPage() {
                                     />
                                 </button>
 
-                                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium min-w-[80px] text-center">
+                                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold min-w-[80px] text-center">
                                     {event.category[categoryIndex]}
                                 </span>
 
@@ -508,10 +636,10 @@ export default function LiveMapPage() {
                                 <input
                                     type="checkbox"
                                     className="accent-green-600 w-4 h-4"
-                                    checked={selectedRiders.length === mockRiders.length}
+                                    checked={selectedRiders.length === filteredRiders.length && filteredRiders.length > 0}
                                     onChange={(e) => {
                                         if (e.target.checked) {
-                                            setSelectedRiders(mockRiders.map(r => r.id));
+                                            setSelectedRiders(filteredRiders.map(r => r.id));
                                         } else {
                                             setSelectedRiders([]);
                                         }
@@ -519,11 +647,11 @@ export default function LiveMapPage() {
                                     id="selectAll"
                                 />
                                 <label htmlFor="selectAll" className={`px-3 py-1 rounded-md text-sm font-semibold cursor-pointer transition-all duration-200
-    ${selectedRiders.length === mockRiders.length
+      ${selectedRiders.length === filteredRiders.length && filteredRiders.length > 0
                                         ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
                                         : "bg-white text-gray-700 hover:bg-gray-100"}`}
                                 >
-                                    {selectedRiders.length === mockRiders.length ? "Hepsini Kaldır" : "Hepsini Seç"}
+                                    {selectedRiders.length === filteredRiders.length && filteredRiders.length > 0 ? "Hepsini Kaldır" : "Hepsini Seç"}
                                 </label>
                             </div>
                             {filteredRiders.map((rider) => (
@@ -533,7 +661,10 @@ export default function LiveMapPage() {
                                     style={{ backgroundColor: getParkurColor(rider.parkur) }}
 
                                     className={`flex items-center justify-between p-1 ${getParkurColor(rider.parkur)} rounded shadow-sm text-black hover:bg-white transition`}
-                                    onDoubleClick={() => setTimingOpen(true)}   >
+                                    onDoubleClick={() => {
+                                        setActiveRider(rider);
+                                        setTimingOpen(true);
+                                    }}  >
                                     <label className="flex items-center gap-2">
                                         <input
                                             type="checkbox"
@@ -546,10 +677,16 @@ export default function LiveMapPage() {
                                     <div className="flex gap-1 justify-center items-center">
 
                                         <button className="text-[#0da27e]  hover:text-[#376b60]">
-                                            <TbClockHour4Filled onClick={() => setTimingOpen(true)} size={19} title="Timing" />
+                                            <TbClockHour4Filled onClick={() => {
+                                                setActiveRider(rider);
+                                                setTimingOpen(true);
+                                            }} size={19} title="Timing" />
                                         </button>
                                         <button className="text-red-500  hover:text-red-700">
-                                            <FaBriefcaseMedical onClick={() => setVetOpen(true)} size={18} title="Vet Kartı" />
+                                            <FaBriefcaseMedical onClick={() => {
+                                                setActiveRider(rider);
+                                                setVetOpen(true);
+                                            }} size={18} title="Vet Kartı" />
                                         </button>
                                     </div>
                                 </div>
@@ -561,7 +698,7 @@ export default function LiveMapPage() {
                             onClose={() => setVetOpen(false)}
                             title={<div className="flex justify-between items-center gap-4">
                                 <span>Veteriner Raporu </span>
-                                <span className="text-sm"> 🐎At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                                <span className="text-sm"> 🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} Phase{activeRider?.parkur}</span>
                             </div>}
                         >
                             <VetTable />
@@ -571,7 +708,7 @@ export default function LiveMapPage() {
                             onClose={() => setTimingOpen(false)}
                             title={<div className="flex justify-between items-center gap-4">
                                 <span>Timing</span>
-                                <span className="text-sm">🐎 At: Carolla 🆔 At No: 1245 🏇 Binici: Ahmet Yılmaz  🏷️ Takım: Kayseri Riders 🏆 2</span>
+                                <span className="text-sm"> 🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club}  Phase{activeRider?.parkur}</span>
                             </div>}
                         >
                             <TimingTable />
