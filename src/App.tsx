@@ -1,17 +1,16 @@
+import { Route, Routes } from "react-router-dom";
 
-import { Route, Routes } from 'react-router-dom'
-
-import Layout from './Layout'
-import Homepage from './pages/Homepage'
-import LiveMapPage from './pages/LiveMapPage'
-import EnduranceCardTable from './pages/EventResultList'
-import LiveEventList from './pages/LiveEventList'
-import EventDetail from './pages/EventDetail'
-import UpcomingEventList from './pages/UpcomingEventList'
-import AllEvents from './pages/AllEvents'
+import Layout from "./Layout";
+import Homepage from "./pages/Homepage";
+import LiveMapPage from "./pages/LiveMapPage";
+import EnduranceCardTable from "./pages/EventResultList";
+import LiveEventList from "./pages/LiveEventList";
+import EventDetail from "./pages/EventDetail";
+import UpcomingEventList from "./pages/UpcomingEventList";
+import AllEvents from "./pages/AllEvents";
+import ResultRiderList from "./pages/ResultRiderList";
 
 function App() {
-
   return (
     <>
       <Layout>
@@ -23,11 +22,11 @@ function App() {
           <Route path="/event-detail" element={<EventDetail />} />
           <Route path="/upcoming-event" element={<UpcomingEventList />} />
           <Route path="/all-events" element={<AllEvents />} />
+          <Route path="/riders" element={<ResultRiderList />} />
         </Routes>
       </Layout>
     </>
-
-  )
+  );
 }
 
-export default App
+export default App;

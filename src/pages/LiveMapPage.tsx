@@ -20,7 +20,7 @@ import startIcon from "@/assets/images/start.svg";
 import finishIcon from "@/assets/images/finish.svg";
 import { useLocation } from "react-router-dom";
 
-const mockRiders = [
+export const mockRiders = [
   {
     id: 1,
     name: "Ahmet Yılmaz",

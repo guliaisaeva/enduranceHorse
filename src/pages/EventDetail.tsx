@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const categories = [
   {
@@ -38,6 +39,7 @@ const categories = [
 
 export default function EventDetail() {
   const location = useLocation();
+  const navigate = useNavigate();
   const event = location.state;
 
   if (!event)
@@ -82,6 +84,14 @@ export default function EventDetail() {
           {categories.map((cat, index) => (
             <div
               key={index}
+              onClick={() =>
+                navigate("/riders", {
+                  state: {
+                    ...event,
+                    category: categories.map((c) => c.name),
+                  },
+                })
+              }
               className={`flex items-center justify-between p-3 mb-3 rounded text-white ${cat.statusColor} ${cat.hoverColor} hover:text-white `}
             >
               <span className="font-medium">
