@@ -41,7 +41,7 @@ const events = [
         date: "13/07/2025",
         description: "3 days from now",
         location: "Ravelo, Tenerife 🇪🇸",
-        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiC0Ox5754kr8XTyNp2t0QZZvEHa1JG_E_wg&s", // kendi resminle değiştir
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiC0Ox5754kr8XTyNp2t0QZZvEHa1JG_E_wg&s", 
         categories: baseCategories.map(cat => ({ name: cat.name })),
 
     },

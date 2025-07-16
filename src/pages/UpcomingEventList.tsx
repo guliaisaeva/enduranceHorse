@@ -110,7 +110,7 @@ export default function UpcomingEventList() {
                 {events.map((event, idx) => (
                     <EventCard
                         key={idx}
-                        event={{ ...event, status: "UPCOMING" }}
+                        event={{ ...event }}
                         type="upcoming"
                         onClick={() => navigate("/event-detail", { state: event })}
 
