@@ -58,7 +58,14 @@ export default function EventDetail() {
         </h1>
         <p className="text-sm text-gray-500">{event.date}</p>
         <p className="text-sm text-gray-600">{event.location}</p>
-        <button className="mt-2 bg-[#0da27e] hover:bg-[#428173] text-white px-4 py-1 rounded text-xs">
+        <button
+          onClick={() =>
+            event.status === "UPCOMING"
+              ? navigate("/upcoming-event")
+              : navigate("/events")
+          }
+          className="mt-2 bg-[#0da27e] hover:bg-[#428173] text-white px-4 py-1 rounded text-xs"
+        >
           {event.status}
         </button>
       </div>
@@ -84,14 +91,17 @@ export default function EventDetail() {
           {categories.map((cat, index) => (
             <div
               key={index}
-              onClick={() =>
-                navigate("/riders", {
-                  state: {
-                    ...event,
-                    category: categories.map((c) => c.name),
-                  },
-                })
-              }
+              onClick={() => {
+                if (event.status === "RESULT") {
+                  navigate("/riders", {
+                    state: {
+                      ...event,
+                      category: categories.map((c) => c.name),
+                      selectedCategory: cat.name,
+                    },
+                  });
+                }
+              }}
               className={`flex items-center justify-between p-3 mb-3 rounded text-white ${cat.statusColor} ${cat.hoverColor} hover:text-white `}
             >
               <span className="font-medium">

@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaBriefcaseMedical, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
-import { mockRiders } from "./LiveMapPage"; // Assuming mockRiders includes .category field
+import { mockRiders } from "./LiveMapPage";
 import { TbClockHour4Filled } from "react-icons/tb";
 import Modal from "../components/Modal";
 import VetTable from "../components/VetTable";
 import TimingTable from "../components/TimingTable";
+import InfoSection from "../components/InfoSection";
 
 function ResultRiderList() {
   const location = useLocation();
@@ -15,7 +16,6 @@ function ResultRiderList() {
 
   const categoryList: string[] = event.category || [];
 
-  // 👇 Initial category index based on selectedCategory passed from EventDetail
   const selectedCategory = event?.selectedCategory ?? categoryList[0];
   const initialIndex = categoryList.findIndex((c) => c === selectedCategory);
   const [categoryIndex, setCategoryIndex] = useState(
@@ -47,7 +47,18 @@ function ResultRiderList() {
     club: string;
     position: { lat: number; lng: number };
     icon: string;
+    status?: string;
   } | null>(null);
+
+  const total = filteredRiders.length;
+  const eliminated = filteredRiders.filter(
+    (r) => r.status === "eliminated"
+  ).length;
+  const qualified = total - eliminated;
+
+  const qualifiedPercent = total ? Math.round((qualified / total) * 100) : 0;
+  const eliminatedPercent = total ? Math.round((eliminated / total) * 100) : 0;
+  const [showInfoTable, setShowInfoTable] = useState(false);
   return (
     <div className="p-6">
       <div className="text-center">
@@ -58,14 +69,14 @@ function ResultRiderList() {
           <span>{event.date}</span> {event.location}{" "}
           <img
             className="border rounded-full h-8 w-8"
-            src={event.flagImageUrL}
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/250px-Flag_of_Turkey.svg.png"
             alt="spain flag"
           />{" "}
         </div>
         <p className="text-xs text-gray-400 m-1 "> 09:00:00 </p>
       </div>
 
-      <div className="text-black flex justify-center items-center gap-2 pb-2">
+      <div className="text-black flex justify-center items-center gap-2 p-3">
         <button onClick={handlePrev} disabled={categoryIndex === 0}>
           <FaCaretLeft
             className={`text-xl ${
@@ -77,7 +88,7 @@ function ResultRiderList() {
         </button>
 
         <span className="px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-semibold">
-          {event.category[categoryIndex]}
+          {categoryList[categoryIndex]}
         </span>
 
         <button
@@ -87,87 +98,157 @@ function ResultRiderList() {
           <FaCaretRight
             className={`text-xl ${
               categoryIndex === categoryList.length - 1
-              ? "opacity-30 cursor-not-allowed"
-              : "cursor-pointer"
+                ? "opacity-30 cursor-not-allowed"
+                : "cursor-pointer"
             }`}
           />
         </button>
       </div>
+      <div className="text-center">
+        <button
+          onClick={() => setShowInfoTable((prev) => !prev)}
+          className="mb-2 px-3 py-1 bg-red-100 text-red-700 font-semibold  rounded hover:bg-red-200 transition"
+        >
+          INFO
+        </button>
+        {showInfoTable && <InfoSection />}
+      </div>
 
-      <ul className="space-y-2">
-        {filteredRiders.length === 0 ? (
-          <li className="text-gray-500">No riders in this category</li>
-        ) : (
-          filteredRiders.map((rider) => (
-            <li key={rider.id} className="p-2 border rounded">
-              <strong>{rider.name}</strong> - Horse: {rider.horse}
-
-              <div className="flex gap-1 justify-center items-center">
-                    <button className="text-[#0da27e]  hover:text-[#376b60]">
-                      <TbClockHour4Filled
+      <div className="flex  justify-between text-sm text-gray-700  flex-wrap  m-8">
+        <div>
+          ✅ Qualified:{" "}
+          <span className="font-semibold text-green-600">
+            {qualified} ({qualifiedPercent}%)
+          </span>
+        </div>
+        <div>
+          ❌ Eliminated:{" "}
+          <span className="font-semibold text-red-600">
+            {eliminated} ({eliminatedPercent}%)
+          </span>
+        </div>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200 mt-4 shadow rounded">
+          <thead className="bg-gray-100 sh">
+            <tr>
+              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Rider
+              </th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Horse
+              </th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Club
+              </th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                Status
+              </th>
+              <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">
+                Timing / VetCard
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {filteredRiders.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center text-gray-500 py-4">
+                  No riders in this category
+                </td>
+              </tr>
+            ) : (
+              filteredRiders.map((rider) => (
+                <tr key={rider.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2 font-medium text-gray-700">
+                    {rider.name}
+                  </td>
+                  <td className="px-4 py-2 text-gray-600">{rider.horse}</td>
+                  <td className="px-4 py-2 text-gray-600">{rider.club}</td>
+                  <td className="px-4 py-2 text-gray-600">
+                    {rider.status === "eliminated" ? (
+                      <span className="text-red-600 font-semibold">
+                        Eliminated
+                      </span>
+                    ) : (
+                      <span className="text-green-600 font-semibold">
+                        Qualified
+                      </span>
+                    )}
+                    {typeof rider.km === "number" && (
+                      <span className="ml-2 text-gray-500 text-sm">
+                        ({rider.km} km)
+                      </span>
+                    )}
+                  </td>{" "}
+                  <td className="px-4 py-2 text-center">
+                    <div className="flex justify-center items-center gap-2">
+                      <button
+                        className="text-[#0da27e] hover:text-[#376b60] mt-0.5"
                         onClick={() => {
                           setActiveRider(rider);
                           setTimingOpen(true);
                         }}
-                        size={19}
                         title="Timing"
-                      />
-                    </button>
-                    <button className="text-red-500  hover:text-red-700">
-                      <FaBriefcaseMedical
+                      >
+                        <TbClockHour4Filled size={19} />
+                      </button>
+                      <button
+                        className="text-red-500 hover:text-red-700"
                         onClick={() => {
                           setActiveRider(rider);
                           setVetOpen(true);
                         }}
-                        size={18}
                         title="Vet Kartı"
-                      />
-                    </button>
-                  </div>
-            </li>
-          ))
-        )}
-      </ul>
+                      >
+                        <FaBriefcaseMedical size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
-      
       <Modal
-                  isOpen={isVetOpen}
-                  onClose={() => setVetOpen(false)}
-                  title={
-                    <div className="flex justify-between items-center gap-4 text-sm md:text-base">
-                      <span className="font-bold">Veteriner Raporu </span>
-                      <span className="text-xs md:text-sm">
-                        {" "}
-                        🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}{" "}
-                        <span className="hidden md:block">
-                          🏇 Binici: {activeRider?.name} 🏷️ Takım:{" "}
-                          {activeRider?.club} ⭕Phase:{activeRider?.parkur}
-                        </span>{" "}
-                      </span>
-                    </div>
-                  }
-                >
-                  <VetTable />
-                </Modal>
-                <Modal
-                  isOpen={isTimingOpen}
-                  onClose={() => setTimingOpen(false)}
-                  title={
-                    <div className="flex justify-between items-center gap-4">
-                      <span className="font-bold">Timing</span>
-                      <span className="text-xs md:text-sm">
-                        {" "}
-                        🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}{" "}
-                        <span className="hidden md:block">
-                          🏇 Binici: {activeRider?.name} 🏷️ Takım:{" "}
-                          {activeRider?.club} ⭕Phase{activeRider?.parkur}
-                        </span>{" "}
-                      </span>
-                    </div>
-                  }
-                >
-                  <TimingTable />
-                </Modal>
+        isOpen={isVetOpen}
+        onClose={() => setVetOpen(false)}
+        title={
+          <div className="flex justify-between items-center gap-4 text-sm md:text-base">
+            <span className="font-bold">Veteriner Raporu </span>
+            <span className="text-xs md:text-sm">
+              {" "}
+              🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}{" "}
+              <span className="hidden md:block">
+                🏇 Binici: {activeRider?.name} 🏷️ Takım: {activeRider?.club}{" "}
+                ⭕Phase:{activeRider?.parkur}
+              </span>{" "}
+            </span>
+          </div>
+        }
+      >
+        <VetTable />
+      </Modal>
+      <Modal
+        isOpen={isTimingOpen}
+        onClose={() => setTimingOpen(false)}
+        title={
+          <div className="flex justify-between items-center gap-4">
+            <span className="font-bold">Timing</span>
+            <span className="text-xs md:text-sm">
+              {" "}
+              🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}{" "}
+              <span className="hidden md:block">
+                🏇 Binici: {activeRider?.name} 🏷️ Takım: {activeRider?.club}{" "}
+                ⭕Phase{activeRider?.parkur}
+              </span>{" "}
+            </span>
+          </div>
+        }
+      >
+        <TimingTable />
+      </Modal>
     </div>
   );
 }

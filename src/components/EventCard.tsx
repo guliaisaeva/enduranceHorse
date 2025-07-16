@@ -15,6 +15,7 @@ interface EventCardProps {
     type?: "live" | "upcoming" | "result";
     onClick?: () => void;
     buttonLabel?: string;
+    className?: string;
 }
 
 export default function EventCard({ event, type = "live", onClick, buttonLabel }: EventCardProps) {
