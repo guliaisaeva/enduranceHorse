@@ -35,7 +35,7 @@ const baseCategories = [
 
 const events = [
     {
-        status: "UPCOMING",
+        status: "RESULT",
         daysLeft: 4,
         title: "II Raid Social CH del Norte y AERAC",
         date: "13/07/2025",
@@ -46,7 +46,7 @@ const events = [
 
     },
     {
-        status: "UPCOMING",
+        status: "RESULT",
         daysLeft: 17,
         title: "Raid Las Cumbres",
         date: "26/07/2025",
@@ -57,7 +57,7 @@ const events = [
 
     },
     {
-        status: "UPCOMING",
+        status: "RESULT",
         daysLeft: 80,
         title: "VI Raid Chanajiga Campeonato de Canarias 2025",
         date: "27/09/2025",
@@ -68,7 +68,7 @@ const events = [
 
     },
     {
-        status: "UPCOMING",
+        status: "RESULT",
         daysLeft: 121,
         title: "XXIV Raid Ademuz",
         date: "07/11/2025 - 09/11/2025",
@@ -111,7 +111,7 @@ export default function EnduranceCardTable() {
                     <EventCard
                         key={idx}
                         event={{ ...event, status: "RESULT" }}
-                        type="upcoming"
+                        type="result"
                         onClick={() => navigate("/event-detail", { state: event })}
 
                     />

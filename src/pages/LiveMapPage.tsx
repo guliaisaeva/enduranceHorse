@@ -429,7 +429,7 @@ export default function LiveMapPage() {
                                     onClose={() => setVetOpen(false)}
                                     title={<div className="flex justify-between items-center gap-4 text-sm md:text-base">
                                         <span className="font-bold">Veteriner Raporu </span>
-                                        <span className="text-xs md:text-sm"> 🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}  <span className="hidden md:block">🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} Phase{activeRider?.parkur}</span> </span>
+                                        <span className="text-xs md:text-sm"> 🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}  <span className="hidden md:block">🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} ⭕Phase:{activeRider?.parkur}</span> </span>
                                     </div>}
                                 >
                                     <VetTable />
@@ -439,7 +439,7 @@ export default function LiveMapPage() {
                                     onClose={() => setTimingOpen(false)}
                                     title={<div className="flex justify-between items-center gap-4">
                                         <span className="font-bold">Timing</span>
-                                        <span className="text-xs md:text-sm"> 🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}  <span className="hidden md:block">🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} Phase{activeRider?.parkur}</span> </span>
+                                        <span className="text-xs md:text-sm"> 🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}  <span className="hidden md:block">🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} ⭕Phase{activeRider?.parkur}</span> </span>
                                     </div>}
                                 >
                                     <TimingTable />
@@ -697,7 +697,7 @@ export default function LiveMapPage() {
                             onClose={() => setVetOpen(false)}
                             title={<div className="flex justify-between items-center gap-4">
                                 <span>Veteriner Raporu </span>
-                                <span className="text-sm"> 🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} Phase{activeRider?.parkur}</span>
+                                <span className="text-sm"> 🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club} ⭕Phase{activeRider?.parkur}</span>
                             </div>}
                         >
                             <VetTable />
@@ -707,7 +707,7 @@ export default function LiveMapPage() {
                             onClose={() => setTimingOpen(false)}
                             title={<div className="flex justify-between items-center gap-4">
                                 <span>Timing</span>
-                                <span className="text-sm"> 🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club}  Phase{activeRider?.parkur}</span>
+                                <span className="text-sm"> 🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇 Binici: {activeRider?.name}  🏷️ Takım: {activeRider?.club}  ⭕Phase{activeRider?.parkur}</span>
                             </div>}
                         >
                             <TimingTable />

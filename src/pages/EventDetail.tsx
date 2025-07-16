@@ -1,30 +1,6 @@
-// import { useLocation } from "react-router-dom";
-
-// export default function EventDetail() {
-//   const location = useLocation();
-//   const event = location.state;
-
-//   if (!event) return <div className="p-6 text-red-500">No event data provided.</div>;
-
-//   return (
-//     <div className="max-w-4xl mx-auto p-6">
-//       <img src={event.imageUrl} alt={event.title} className="w-full h-60 object-cover rounded-lg mb-6" />
-//       <h1 className="text-2xl font-bold mb-2">{event.title}</h1>
-//       <p className="text-gray-600 mb-2">{event.date}</p>
-//       <p className="text-gray-700 mb-4">{event.description}</p>
-//       <p className="text-gray-500 text-sm">{event.location}</p>
-//       <span className="inline-block mt-4 px-4 py-1 bg-green-600 text-white rounded-full text-xs">
-//         {event.status}
-//       </span>
-//     </div>
-//   );
-// }
-
-
 import { useLocation } from "react-router-dom";
-import { FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
 
-// Mock categories per event
 const categories = [
     {
         name: "CEN1* 80",
@@ -40,7 +16,6 @@ const categories = [
         count: 5,
         finished: 5,
         eliminated: 0,
-
         statusColor: "bg-yellow-400",
         hoverColor: "hover:bg-yellow-500",
 
@@ -50,7 +25,6 @@ const categories = [
         count: 4,
         finished: 4,
         eliminated: 1,
-
         statusColor: "bg-green-400",
         hoverColor: "hover:bg-green-500",
 
@@ -80,7 +54,6 @@ export default function EventDetail() {
     return (
         <div className="max-w-5xl mx-auto p-6">
             <div className="text-center mb-6">
-
                 <h1 className="text-center text-base md:text-lg text-[#118e6f] font-semibold uppercase">{event.title}</h1>
                 <p className="text-sm text-gray-500">{event.date}</p>
                 <p className="text-sm text-gray-600">{event.location}</p>
@@ -127,20 +100,7 @@ export default function EventDetail() {
                 </div>
             </div>
 
-            <div className="mt-8 border-t justify-center pt-4 flex flex-wrap gap-6 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-blue-500" />
-                    VET-GATE
-                </div>
-                <div className="flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-green-500" />
-                    ASISTENCIA EL ACEBIÑAL
-                </div>
-                <div className="flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-yellow-500" />
-                    ASISTENCIA PUNTO DE ENCUENTRO
-                </div>
-            </div>
+
         </div>
     );
 }
