@@ -19,6 +19,7 @@ import sariIcon from "@/assets/images/sari.png";
 import startIcon from "@/assets/images/start.svg";
 import finishIcon from "@/assets/images/finish.svg";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const mockRiders = [
   {
@@ -271,6 +272,7 @@ const stations = [
 ];
 
 export default function LiveMapPage() {
+  const { t } = useTranslation();
   const location = useLocation();
   const event = location.state;
   const [selectedRiders, setSelectedRiders] = useState<number[]>([]);
@@ -345,7 +347,10 @@ export default function LiveMapPage() {
     return <p className="text-center mt-10">Etkinlik bulunamadı.</p>;
   }
   return (
-    <div className="text-white flex gap-3  flex-wrap p-3">
+    <div className="text-white flex gap-3 justify-center flex-wrap p-3">
+      <h2 className="text-center m-4 text-base md:text-lg text-[#118e6f] font-semibold uppercase">
+        {t("watchLive")}
+      </h2>
       <div className="md:hidden flex justify-center w-full gap-2 mb-4">
         <div className="inline-flex bg-gray-200 rounded-full p-1 transition-colors duration-300 shadow">
           <button
@@ -356,7 +361,7 @@ export default function LiveMapPage() {
                 : "text-gray-700"
             }`}
           >
-            Riders
+            {t("riders")}
           </button>
           <button
             onClick={() => setActiveTab("map")}
@@ -366,7 +371,7 @@ export default function LiveMapPage() {
                 : "text-gray-700"
             }`}
           >
-            Map
+            {t("map")}
           </button>
         </div>
       </div>

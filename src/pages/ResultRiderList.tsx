@@ -130,7 +130,7 @@ function ResultRiderList() {
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 mt-4 shadow rounded">
-          <thead className="bg-gray-100 sh">
+          <thead className="bg-gray-200 ">
             <tr>
               <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                 Rider

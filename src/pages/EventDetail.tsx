@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+
 const categories = [
   {
     name: "CEN1* 80",
