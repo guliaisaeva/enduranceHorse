@@ -7,12 +7,14 @@ import Modal from "../components/Modal";
 import VetTable from "../components/VetTable";
 import TimingTable from "../components/TimingTable";
 import InfoSection from "../components/InfoSection";
+import { useTranslation } from "react-i18next";
 
 function ResultRiderList() {
   const location = useLocation();
+  const { t } = useTranslation();
   const event = location.state;
 
-  if (!event) return <div className="p-4 text-red-500">No event data</div>;
+  if (!event) return <div className="p-4 text-red-500">{t("noEventData")}</div>;
 
   const categoryList: string[] = event.category || [];
 
@@ -68,7 +70,7 @@ function ResultRiderList() {
         <div className="text-xs text-gray-500 mb-2 flex gap-2 justify-center items-center">
           <span>{event.date}</span> {event.location}{" "}
           <img
-            className="border rounded-full h-8 w-8"
+            className="border rounded-full h-5 w-5 md:h-8 md:w-8"
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/250px-Flag_of_Turkey.svg.png"
             alt="spain flag"
           />{" "}
@@ -104,25 +106,25 @@ function ResultRiderList() {
           />
         </button>
       </div>
-      <div className="text-center">
+      <div className="flex justify-center">
         <button
           onClick={() => setShowInfoTable((prev) => !prev)}
-          className="mb-2 px-3 py-1 bg-red-100 text-red-700 font-semibold  rounded hover:bg-red-200 transition"
+          className="hidden md:block mb-2 px-3 py-1 bg-red-100 text-red-700 font-semibold  rounded hover:bg-red-200 transition"
         >
-          INFO
+          {t("info")}
         </button>
         {showInfoTable && <InfoSection />}
       </div>
 
-      <div className="flex  justify-between text-sm text-gray-700  flex-wrap  m-8">
+      <div className="flex justify-center md:justify-between text-sm text-gray-700 gap-2 flex-wrap m-0 md:m-8">
         <div>
-          ✅ Qualified:{" "}
+          ✅ {t("qualifiedLabel")}:{" "}
           <span className="font-semibold text-green-600">
             {qualified} ({qualifiedPercent}%)
           </span>
         </div>
         <div>
-          ❌ Eliminated:{" "}
+          ❌ {t("eliminatedLabel")}:{" "}
           <span className="font-semibold text-red-600">
             {eliminated} ({eliminatedPercent}%)
           </span>
@@ -132,20 +134,19 @@ function ResultRiderList() {
         <table className="min-w-full divide-y divide-gray-200 mt-4 shadow rounded">
           <thead className="bg-gray-200 ">
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                Rider
+              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"></th>
+              <th className=" px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                {t("rider")}{" "}
+              </th>
+
+              <th className="hidden md:block px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                {t("club")}
               </th>
               <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                Horse
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                Club
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                Status
+                {t("status")}
               </th>
               <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">
-                Timing / VetCard
+                {t("timingTitle")}/{t("vetCardTitle")}
               </th>
             </tr>
           </thead>
@@ -153,42 +154,52 @@ function ResultRiderList() {
             {filteredRiders.length === 0 ? (
               <tr>
                 <td colSpan={5} className="text-center text-gray-500 py-4">
-                  No riders in this category
+                  {t("noRiders")}
                 </td>
               </tr>
             ) : (
               filteredRiders.map((rider) => (
-                <tr key={rider.id} className="hover:bg-gray-50">
+                <tr
+                  key={rider.id}
+                  className="hover:bg-gray-50 text-sm md:text-base"
+                >
+                  <td className="px-4 py-2 text-green-600">Q2</td>
                   <td className="px-4 py-2 font-medium text-gray-700">
-                    {rider.name}
+                    <span>
+                      {" "}
+                      {rider.name}/{rider.id}
+                    </span>{" "}
+                    <span className="">({rider.horse})</span>
                   </td>
-                  <td className="px-4 py-2 text-gray-600">{rider.horse}</td>
-                  <td className="px-4 py-2 text-gray-600">{rider.club}</td>
+                  <td className="hidden md:block px-4 py-2 text-gray-600">
+                    {rider.club}
+                  </td>
                   <td className="px-4 py-2 text-gray-600">
                     {rider.status === "eliminated" ? (
-                      <span className="text-red-600 font-semibold">
-                        Eliminated
+                      <span className="text-red-600 font-semibold capitalize">
+                        {t("eliminatedLabel")}
                       </span>
                     ) : (
-                      <span className="text-green-600 font-semibold">
-                        Qualified
+                      <span className="text-green-600 font-semibold capitalize">
+                        {t("qualifiedLabel")}{" "}
                       </span>
                     )}
-                    {typeof rider.km === "number" && (
-                      <span className="ml-2 text-gray-500 text-sm">
-                        ({rider.km} km)
-                      </span>
-                    )}
+                    {rider.status !== "eliminated" &&
+                      typeof rider.km === "number" && (
+                        <span className="ml-1 text-gray-500 text-sm">
+                          {rider.km} km
+                        </span>
+                      )}
                   </td>{" "}
                   <td className="px-4 py-2 text-center">
-                    <div className="flex justify-center items-center gap-2">
+                    <div className="flex flex-col md:flex-row justify-center items-center gap-2">
                       <button
                         className="text-[#0da27e] hover:text-[#376b60] mt-0.5"
                         onClick={() => {
                           setActiveRider(rider);
                           setTimingOpen(true);
                         }}
-                        title="Timing"
+                        title={t("timingTitle")}
                       >
                         <TbClockHour4Filled size={19} />
                       </button>
@@ -198,7 +209,7 @@ function ResultRiderList() {
                           setActiveRider(rider);
                           setVetOpen(true);
                         }}
-                        title="Vet Kartı"
+                        title={t("vetCardTitle")}
                       >
                         <FaBriefcaseMedical size={18} />
                       </button>

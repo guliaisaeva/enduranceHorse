@@ -17,7 +17,6 @@ import maviIcon from "@/assets/images/mavi.png";
 import morIcon from "@/assets/images/mor.png";
 import sariIcon from "@/assets/images/sari.png";
 import startIcon from "@/assets/images/start.svg";
-import finishIcon from "@/assets/images/finish.svg";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -344,7 +343,7 @@ export default function LiveMapPage() {
   }, [categoryIndex]);
 
   if (!event) {
-    return <p className="text-center mt-10">Etkinlik bulunamadı.</p>;
+    return <p className="text-center mt-10">{t("noEventData")}</p>;
   }
   return (
     <div className="text-white flex gap-3 justify-center flex-wrap p-3">
@@ -455,8 +454,8 @@ export default function LiveMapPage() {
                     >
                       {selectedRiders.length === filteredRiders.length &&
                       filteredRiders.length > 0
-                        ? "Hepsini Kaldır"
-                        : "Hepsini Seç"}
+                        ? t("selectAll")
+                        : t("deselectAll")}
                     </label>
                   </div>
                   {filteredRiders.map((rider) => (
@@ -482,7 +481,8 @@ export default function LiveMapPage() {
                         <span className="text-sm md:text-xs">
                           {rider.name} ({rider.horse}){" "}
                           <span className="text-amber-700 pl-2">
-                            Parkur{rider.parkur}
+                            {t("track")}
+                            {rider.parkur}
                           </span>{" "}
                         </span>
                       </label>
@@ -517,7 +517,7 @@ export default function LiveMapPage() {
                   onClose={() => setVetOpen(false)}
                   title={
                     <div className="flex justify-between items-center gap-4 text-sm md:text-base">
-                      <span className="font-bold">Veteriner Raporu </span>
+                      <span className="font-bold">Veteriner Raporu</span>
                       <span className="text-xs md:text-sm">
                         {" "}
                         🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}{" "}
@@ -637,9 +637,6 @@ export default function LiveMapPage() {
                       {(() => {
                         const path = parkurPaths[visibleParkur];
                         const start = path[0];
-                        const finish = path[path.length - 1];
-                        const isSameLocation =
-                          start.lat === finish.lat && start.lng === finish.lng;
 
                         return (
                           <>
@@ -651,37 +648,6 @@ export default function LiveMapPage() {
                                 scaledSize: new window.google.maps.Size(40, 40),
                               }}
                             />
-
-                            {!isSameLocation && (
-                              <Marker
-                                position={finish}
-                                title="Finish"
-                                icon={{
-                                  url: finishIcon,
-                                  scaledSize: new window.google.maps.Size(
-                                    40,
-                                    40
-                                  ),
-                                }}
-                              />
-                            )}
-
-                            {isSameLocation && (
-                              <Marker
-                                position={{
-                                  lat: finish.lat + 0.00005,
-                                  lng: finish.lng + 0.00005,
-                                }}
-                                title="Finish (offset)"
-                                icon={{
-                                  url: finishIcon,
-                                  scaledSize: new window.google.maps.Size(
-                                    40,
-                                    40
-                                  ),
-                                }}
-                              />
-                            )}
                           </>
                         );
                       })()}
@@ -865,12 +831,14 @@ export default function LiveMapPage() {
               onClose={() => setVetOpen(false)}
               title={
                 <div className="flex justify-between items-center gap-4">
-                  <span>Veteriner Raporu </span>
+                  <span>{t("vetReport")}</span>
                   <span className="text-sm">
                     {" "}
-                    🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇
-                    Binici: {activeRider?.name} 🏷️ Takım: {activeRider?.club}{" "}
-                    ⭕Phase{activeRider?.parkur}
+                    🐎{t("horse")}: {activeRider?.horse} 🆔 {t("horseNumber")}:{" "}
+                    {activeRider?.id} 🏇
+                    {t("rider")}: {activeRider?.name} 🏷️ {t("club")}:{" "}
+                    {activeRider?.club} ⭕{t("phase")}
+                    {activeRider?.parkur}
                   </span>
                 </div>
               }
@@ -882,12 +850,14 @@ export default function LiveMapPage() {
               onClose={() => setTimingOpen(false)}
               title={
                 <div className="flex justify-between items-center gap-4">
-                  <span>Timing</span>
+                  <span>{t("timing")}</span>
                   <span className="text-sm">
                     {" "}
-                    🐎At: {activeRider?.horse} 🆔 At No: {activeRider?.id} 🏇
-                    Binici: {activeRider?.name} 🏷️ Takım: {activeRider?.club}{" "}
-                    ⭕Phase{activeRider?.parkur}
+                    🐎{t("horse")}: {activeRider?.horse} 🆔 {t("horseNumber")}:{" "}
+                    {activeRider?.id} 🏇
+                    {t("rider")}: {activeRider?.name} 🏷️ {t("club")}:{" "}
+                    {activeRider?.club} ⭕{t("phase")}
+                    {activeRider?.parkur}
                   </span>
                 </div>
               }
@@ -898,15 +868,15 @@ export default function LiveMapPage() {
 
           <div className="bg-[#FEA91D] p-4 rounded-md space-y-4 hidden sm:block">
             <p className="flex justify- start items-center gap-2">
-              <FaBell /> ANLIK UYARILAR PANELİ
+              <FaBell /> {t("alertsPanel")}
             </p>
             <p>
-              Rota Dışı Bildirimi:{" "}
+              {t("offTrackAlert")}:{" "}
               <span className="text-red-600 font-extrabold">Yok</span>{" "}
             </p>
             <p>
               {" "}
-              Anlık Uyarı:{" "}
+              {t("instantAlert")}:{" "}
               <span className="text-red-600 font-extrabold">Yok</span>
             </p>
           </div>
@@ -946,7 +916,7 @@ export default function LiveMapPage() {
                                 px-3 py-1.5 text-sm sm:px-6 sm:py-3 sm:text-base"
                   title={ridersInParkur || `Parkur ${parkur}`}
                 >
-                  Parkur {parkur}
+                  {t("track")} {parkur}
                 </div>
               );
             })}
@@ -976,45 +946,17 @@ export default function LiveMapPage() {
                     const path = parkurPaths[visibleParkur];
                     if (!path || path.length === 0) return null;
                     const start = path[0];
-                    const finish = path[path.length - 1];
-                    const isSameLocation =
-                      start.lat === finish.lat && start.lng === finish.lng;
 
                     return (
                       <>
                         <Marker
                           position={start}
-                          title="Start"
+                          title="Start / Finish"
                           icon={{
                             url: startIcon,
                             scaledSize: new window.google.maps.Size(40, 40),
                           }}
                         />
-
-                        {!isSameLocation && (
-                          <Marker
-                            position={finish}
-                            title="Finish"
-                            icon={{
-                              url: finishIcon,
-                              scaledSize: new window.google.maps.Size(40, 40),
-                            }}
-                          />
-                        )}
-
-                        {isSameLocation && (
-                          <Marker
-                            position={{
-                              lat: finish.lat + 0.00005,
-                              lng: finish.lng + 0.00005,
-                            }}
-                            title="Finish (offset)"
-                            icon={{
-                              url: finishIcon,
-                              scaledSize: new window.google.maps.Size(40, 40),
-                            }}
-                          />
-                        )}
                       </>
                     );
                   })()}
