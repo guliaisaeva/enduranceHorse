@@ -9,6 +9,7 @@ import EventDetail from "./pages/EventDetail";
 import UpcomingEventList from "./pages/UpcomingEventList";
 import AllEvents from "./pages/AllEvents";
 import ResultRiderList from "./pages/ResultRiderList";
+import AllEventTable from "./pages/AllEventTable";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/event-detail" element={<EventDetail />} />
           <Route path="/upcoming-event" element={<UpcomingEventList />} />
           <Route path="/all-events" element={<AllEvents />} />
+          <Route path="/all-events-table" element={<AllEventTable />} />
           <Route path="/riders" element={<ResultRiderList />} />
         </Routes>
       </Layout>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/lastLogo.png";
-import { FaUser } from "react-icons/fa";
+import { FaCalendarAlt, FaUser } from "react-icons/fa";
 import "../index.css";
 import { useTranslation } from "react-i18next";
 
@@ -43,13 +43,25 @@ function Navbar() {
           to="/atlar"
           className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
         >
+          {t("athletes")}
+        </Link>
+        <Link
+          to="/athlets"
+          className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
+        >
           {t("horses")}
         </Link>
         <Link
-          to="/katilimcilar"
+          to="/clubs"
           className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
         >
           {t("clubs")}
+        </Link>
+        <Link
+          to="/all-events-table"
+          className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
+        >
+          <FaCalendarAlt className="mt-1 transition-colors duration-300" />
         </Link>
       </div>
 
