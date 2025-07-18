@@ -34,6 +34,18 @@ export const mockRiders = [
     km: 80,
   },
   {
+    id: 11,
+    name: "Cem Nur",
+    horse: "Gulsarı",
+    parkur: 1,
+    category: "CEA0* 80",
+    club: "Ankara Riders",
+    position: { lat: 39.927, lng: 32.868 + 0.0008 },
+    icon: morIcon,
+    status: "qualified",
+    km: 80,
+  },
+  {
     id: 2,
     name: "Zeynep Kara",
     horse: "Black",
@@ -256,6 +268,18 @@ const stations = [
     parkur: 1,
   },
   {
+    position: { lat: 39.926, lng: 32.867 },
+    title: "Yardım ve veteriner Noktası",
+    icon: flagIcon,
+    parkur: 2,
+  },
+  {
+    position: { lat: 39.926, lng: 32.867 },
+    title: "Yardım ve veteriner Noktası",
+    icon: flagIcon,
+    parkur: 3,
+  },
+  {
     position: { lat: 39.927, lng: 32.8675 },
     title: "Su Noktası",
     icon: blueFlagIcon,
@@ -267,6 +291,19 @@ const stations = [
     title: "Su istasyonu",
     icon: blueFlagIcon,
     parkur: 3,
+  },
+  {
+    position: { lat: 39.927, lng: 32.8675 },
+    title: "Su Noktası",
+    icon: blueFlagIcon,
+    parkur: 2,
+  },
+
+  {
+    position: { lat: 39.926, lng: 32.867 },
+    title: "Yardım ve veteriner Noktası",
+    icon: flagIcon,
+    parkur: 2,
   },
 ];
 
@@ -562,12 +599,16 @@ export default function LiveMapPage() {
                 </p>
                 <p>
                   {t("offTrackAlert")}:{" "}
-                  <span className="text-red-600 font-extrabold">Yok</span>{" "}
+                  <span className="text-red-600 font-extrabold">
+                    {t("none")}
+                  </span>{" "}
                 </p>
                 <p>
                   {" "}
                   {t("instantAlert")}:{" "}
-                  <span className="text-red-600 font-extrabold">Yok</span>
+                  <span className="text-red-600 font-extrabold">
+                    {t("none")}
+                  </span>
                 </p>
               </div>
             </div>{" "}
@@ -877,12 +918,12 @@ export default function LiveMapPage() {
             </p>
             <p>
               {t("offTrackAlert")}:{" "}
-              <span className="text-red-600 font-extrabold">Yok</span>{" "}
+              <span className="text-red-600 font-extrabold">{t("none")}</span>{" "}
             </p>
             <p>
               {" "}
               {t("instantAlert")}:{" "}
-              <span className="text-red-600 font-extrabold">Yok</span>
+              <span className="text-red-600 font-extrabold">{t("none")}</span>
             </p>
           </div>
         </div>

@@ -26,7 +26,7 @@
   "alertsPanel": "Live Alerts Panel",
   "offTrackAlert": "Off Track Alert",
   "instantAlert": "Instant Alert",
-  "none": "None",
+  "none": "No",
   "selectAll": "Select All",
   "deselectAll": "Deselect All",
   "track": "Track",
@@ -53,5 +53,4 @@
   "eliminatedLabel": "Eliminated",
   "liveAlertsPanel": "Live Alerts Panel",
   "offRouteNotification": "Off-Route Notification"
-
 }
