@@ -347,10 +347,10 @@ export default function LiveMapPage() {
   }
   return (
     <div className="text-white flex gap-3 justify-center flex-wrap p-3">
-      <h2 className="text-center m-4 text-base md:text-lg text-[#118e6f] font-semibold uppercase">
+      <h2 className="text-center m-1 md:m-4 text-base md:text-lg text-[#118e6f] font-semibold uppercase">
         {t("watchLive")}
       </h2>
-      <div className="md:hidden flex justify-center w-full gap-2 mb-4">
+      <div className="md:hidden flex justify-center w-full gap-2 ">
         <div className="inline-flex bg-gray-200 rounded-full p-1 transition-colors duration-300 shadow">
           <button
             onClick={() => setActiveTab("riders")}
@@ -494,7 +494,7 @@ export default function LiveMapPage() {
                               setTimingOpen(true);
                             }}
                             size={19}
-                            title="Timing"
+                            title={t("timingTitle")}
                           />
                         </button>
                         <button className="text-red-500  hover:text-red-700">
@@ -504,7 +504,7 @@ export default function LiveMapPage() {
                               setVetOpen(true);
                             }}
                             size={18}
-                            title="Vet Kartı"
+                            title={t("vetCard")}
                           />
                         </button>
                       </div>
@@ -517,13 +517,15 @@ export default function LiveMapPage() {
                   onClose={() => setVetOpen(false)}
                   title={
                     <div className="flex justify-between items-center gap-4 text-sm md:text-base">
-                      <span className="font-bold">Veteriner Raporu</span>
+                      <span className="font-bold">{t("vetReport")}</span>
                       <span className="text-xs md:text-sm">
                         {" "}
-                        🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}{" "}
+                        🐎{activeRider?.horse} 🆔 {t("horseNumber")}:
+                        {activeRider?.id}{" "}
                         <span className="hidden md:block">
-                          🏇 Binici: {activeRider?.name} 🏷️ Takım:{" "}
-                          {activeRider?.club} ⭕Phase:{activeRider?.parkur}
+                          🏇 {t("rider")}: {activeRider?.name} 🏷️ {t("club")}:{" "}
+                          {activeRider?.club} ⭕{t("phase")}:
+                          {activeRider?.parkur}
                         </span>{" "}
                       </span>
                     </div>
@@ -536,13 +538,15 @@ export default function LiveMapPage() {
                   onClose={() => setTimingOpen(false)}
                   title={
                     <div className="flex justify-between items-center gap-4">
-                      <span className="font-bold">Timing</span>
+                      <span className="font-bold">{t("timingTitle")}</span>
                       <span className="text-xs md:text-sm">
                         {" "}
-                        🐎{activeRider?.horse} 🆔 At No:{activeRider?.id}{" "}
+                        🐎{activeRider?.horse} 🆔 {t("horseNumber")}:
+                        {activeRider?.id}{" "}
                         <span className="hidden md:block">
-                          🏇 Binici: {activeRider?.name} 🏷️ Takım:{" "}
-                          {activeRider?.club} ⭕Phase{activeRider?.parkur}
+                          🏇 {t("rider")}: {activeRider?.name} 🏷️ {t("club")}:{" "}
+                          {activeRider?.club} ⭕{t("phase")}:
+                          {activeRider?.parkur}
                         </span>{" "}
                       </span>
                     </div>
@@ -554,15 +558,15 @@ export default function LiveMapPage() {
 
               <div className="bg-[#FEA91D] p-4 rounded-md space-y-4 hidden sm:block">
                 <p className="flex justify- start items-center gap-2">
-                  <FaBell /> ANLIK UYARILAR PANELİ
+                  <FaBell /> {t("alertsPanel")}
                 </p>
                 <p>
-                  Rota Dışı Bildirimi:{" "}
+                  {t("offTrackAlert")}:{" "}
                   <span className="text-red-600 font-extrabold">Yok</span>{" "}
                 </p>
                 <p>
                   {" "}
-                  Anlık Uyarı:{" "}
+                  {t("instantAlert")}:{" "}
                   <span className="text-red-600 font-extrabold">Yok</span>
                 </p>
               </div>
@@ -608,7 +612,7 @@ export default function LiveMapPage() {
                                 px-3 py-1.5 text-sm sm:px-6 sm:py-3 sm:text-base"
                       title={ridersInParkur || `Parkur ${parkur}`}
                     >
-                      Parkur {parkur}
+                      {t("track")} {parkur}
                     </div>
                   );
                 })}
@@ -642,7 +646,7 @@ export default function LiveMapPage() {
                           <>
                             <Marker
                               position={start}
-                              title="Start"
+                              title="Start/Finish"
                               icon={{
                                 url: startIcon,
                                 scaledSize: new window.google.maps.Size(40, 40),
@@ -769,8 +773,8 @@ export default function LiveMapPage() {
                 >
                   {selectedRiders.length === filteredRiders.length &&
                   filteredRiders.length > 0
-                    ? "Hepsini Kaldır"
-                    : "Hepsini Seç"}
+                    ? t("deselectAll")
+                    : t("selectAll")}
                 </label>
               </div>
               {filteredRiders.map((rider) => (
@@ -796,7 +800,8 @@ export default function LiveMapPage() {
                     <span className="font-medium">
                       {rider.name} ({rider.horse}){" "}
                       <span className="text-amber-700 pl-2">
-                        Parkur{rider.parkur}
+                        {t("phase")}
+                        {rider.parkur}
                       </span>{" "}
                     </span>
                   </label>
@@ -808,7 +813,7 @@ export default function LiveMapPage() {
                           setTimingOpen(true);
                         }}
                         size={19}
-                        title="Timing"
+                        title={t("timingTitle")}
                       />
                     </button>
                     <button className="text-red-500  hover:text-red-700">
@@ -818,7 +823,7 @@ export default function LiveMapPage() {
                           setVetOpen(true);
                         }}
                         size={18}
-                        title="Vet Kartı"
+                        title={t("vetCard")}
                       />
                     </button>
                   </div>
@@ -951,7 +956,7 @@ export default function LiveMapPage() {
                       <>
                         <Marker
                           position={start}
-                          title="Start / Finish"
+                          title="Start/Finish"
                           icon={{
                             url: startIcon,
                             scaledSize: new window.google.maps.Size(40, 40),
