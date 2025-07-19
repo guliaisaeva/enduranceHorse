@@ -116,7 +116,6 @@ function Navbar() {
       }}
     >
       <div className="flex justify-between items-center h-[75px]">
-        {/* Logo */}
         <div className="w-24 sm:w-20 md:w-24 cursor-pointer">
           <Link to="/">
             <img
@@ -127,7 +126,6 @@ function Navbar() {
           </Link>
         </div>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex gap-6 text-sm sm:text-base lg:text-lg font-medium">
           <Link
             to="/"
@@ -167,7 +165,6 @@ function Navbar() {
           </Link>
         </div>
 
-        {/* Right Side: Language + User Icon */}
         <div className="flex items-center gap-4">
           <div className="flex gap-2 bg-[#FEA91D] p-2 font-semibold rounded md:text-[16px] text-[13px]">
             <span
@@ -192,7 +189,6 @@ function Navbar() {
             className="text-white cursor-pointer hidden sm:block"
           />
 
-          {/* Hamburger Icon */}
           <button
             onClick={toggleMenu}
             className="md:hidden text-white focus:outline-none"
@@ -202,7 +198,6 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={`md:hidden fixed top-19 right-0 z-50 transition-transform duration-300 ${
           isOpen

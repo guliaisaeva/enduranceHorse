@@ -3,15 +3,16 @@ import { useLocation } from "react-router-dom";
 export default function AthleteDetail() {
   const location = useLocation();
   const event = location.state;
+  debugger;
 
   if (!event) return <div>Atlet bulunamadı.</div>;
 
   return (
     <div className="max-w-3xl mx-auto mt-8 p-4">
-      <h1 className="text-2xl font-bold">{event.name}</h1>
-      <p className="text-gray-600">Kulüp: {event.club}</p>
-      <p className="text-gray-600">At: {event.horse}</p>
-      <p className="text-gray-600">Kategori: {event.category}</p>
+      <h1 className="text-2xl font-bold">{event.title}</h1>
+      <p className="text-gray-600">Kulüp: {event.status}</p>
+      <p className="text-gray-600">At: {event.date}</p>
+      <p className="text-gray-600">Kategori: {event.location}</p>
       <p className="text-gray-600">KM: {event.km}</p>
       {event.athletImageUrl && (
         <img

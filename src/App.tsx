@@ -11,6 +11,7 @@ import AllEvents from "./pages/events/AllEvents";
 import ResultRiderList from "./pages/events/ResultRiderList";
 import AllEventTable from "./pages/events/AllEventTable";
 import AllAthletesPage from "./pages/athletes/AllAthletes";
+import AthleteDetail from "./pages/athletes/AthleteDetail";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/all-events-table" element={<AllEventTable />} />
           <Route path="/riders" element={<ResultRiderList />} />
           <Route path="/all-athlets" element={<AllAthletesPage />} />
+          <Route path="/athlet-detail" element={<AthleteDetail />} />
         </Routes>
       </Layout>
     </>
