@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import EventCard from "../components/EventCard";
+import EventCard from "../../components/EventCard";
 import { useNavigate } from "react-router-dom";
 
 const categories = [

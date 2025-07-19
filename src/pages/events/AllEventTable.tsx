@@ -10,10 +10,10 @@ function AllEventTable() {
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
 
-  const filteredEvents = events.filter((event) => {
-    const eventYear = new Date(event.date).getFullYear();
-    return eventYear === selectedYear;
-  });
+  //   const filteredEvents = events.filter((event) => {
+  //     const eventYear = new Date(event.date).getFullYear();
+  //     return eventYear === selectedYear;
+  //   });
 
   const handlePrevYear = () => setSelectedYear((prev) => prev - 1);
   const handleNextYear = () => setSelectedYear((prev) => prev + 1);

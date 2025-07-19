@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import EventCard from "../components/EventCard";
+import EventCard from "../../components/EventCard";
 import { useTranslation } from "react-i18next";
 import { events } from "./AllEvents";
 

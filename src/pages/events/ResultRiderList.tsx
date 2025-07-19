@@ -3,10 +3,10 @@ import { FaBriefcaseMedical, FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { mockRiders } from "./LiveMapPage";
 import { TbClockHour4Filled } from "react-icons/tb";
-import Modal from "../components/Modal";
-import VetTable from "../components/VetTable";
-import TimingTable from "../components/TimingTable";
-import InfoSection from "../components/InfoSection";
+import Modal from "../../components/Modal";
+import VetTable from "../../components/VetTable";
+import TimingTable from "../../components/TimingTable";
+import InfoSection from "../../components/InfoSection";
 import { useTranslation } from "react-i18next";
 
 function ResultRiderList() {

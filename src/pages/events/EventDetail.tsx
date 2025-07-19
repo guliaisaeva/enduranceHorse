@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-
 const categories = [
   {
     name: "CEN1* 80",
@@ -43,10 +42,10 @@ export default function EventDetail() {
   const navigate = useNavigate();
   const event = location.state;
 
-  if (!event)
+  if (!event || !event.date)
     return <div className="p-6 text-red-500">No event data provided.</div>;
-  const rawDate = event.date.split(" - ")[0];
-  const [day, month, year] = rawDate.split("/");
+  const rawDate = event?.date?.split(" - ")[0];
+  const [day, month, year] = rawDate?.split("/");
   const isoDateStr = `${year}-${month}-${day}`;
   const dateObj = new Date(isoDateStr);
   const dayName = dateObj.toLocaleDateString("en-US", { weekday: "long" });
