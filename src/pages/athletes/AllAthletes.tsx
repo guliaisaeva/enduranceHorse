@@ -1,5 +1,4 @@
 import AthleteCard from "../../components/AthleteCard";
-import { events } from "../events/AllEvents";
 import { mockRiders } from "../events/LiveMapPage";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +22,7 @@ export default function AllAthletes() {
               club: rider.club,
               horse: rider.horse,
             }}
-            onClick={() => navigate("/athlet-detail", { state: events })}
+            onClick={() => navigate("/athlet-detail", { state: rider })}
           />
         ))}
       </div>
