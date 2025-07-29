@@ -12,6 +12,8 @@ import ResultRiderList from "./pages/events/ResultRiderList";
 import AllEventTable from "./pages/events/AllEventTable";
 import AllAthletesPage from "./pages/athletes/AllAthletes";
 import AthleteDetail from "./pages/athletes/AthleteDetail";
+import AllHorses from "./pages/horses/AllHorses";
+import HorseDetail from "./pages/horses/HorseDetail";
 
 function App() {
   return (
@@ -28,7 +30,9 @@ function App() {
           <Route path="/all-events-table" element={<AllEventTable />} />
           <Route path="/riders" element={<ResultRiderList />} />
           <Route path="/all-athlets" element={<AllAthletesPage />} />
-          <Route path="/athlet-detail" element={<AthleteDetail />} />
+          <Route path="/athlet-detail/:id" element={<AthleteDetail />} />
+          <Route path="/all-horses" element={<AllHorses />} />
+          <Route path="/horse-detail/:id" element={<HorseDetail />} />
         </Routes>
       </Layout>
     </>

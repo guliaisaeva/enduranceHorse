@@ -146,7 +146,7 @@ function Navbar() {
             {t("athletes")}
           </Link>
           <Link
-            to="/athlets"
+            to="/all-horses"
             className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
           >
             {t("horses")}
@@ -242,7 +242,7 @@ function Navbar() {
             onClick={toggleMenu}
             className="flex items-center gap-2 hover:text-orange-400"
           >
-            <FaCalendarAlt /> 
+            <FaCalendarAlt />
           </Link>
         </div>
       </div>

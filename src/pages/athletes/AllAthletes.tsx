@@ -22,7 +22,7 @@ export default function AllAthletes() {
               club: rider.club,
               horse: rider.horse,
             }}
-            onClick={() => navigate("/athlet-detail", { state: rider })}
+            onClick={() => navigate(`/athlet-detail/${rider.id}`, { state: rider })}
           />
         ))}
       </div>
