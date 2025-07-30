@@ -14,6 +14,8 @@ import AllAthletesPage from "./pages/athletes/AllAthletes";
 import AthleteDetail from "./pages/athletes/AthleteDetail";
 import AllHorses from "./pages/horses/AllHorses";
 import HorseDetail from "./pages/horses/HorseDetail";
+import AllClubs from "./pages/clubs/AllClubs";
+import ClubDetail from "./pages/clubs/ClubDetail";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/athlet-detail/:id" element={<AthleteDetail />} />
           <Route path="/all-horses" element={<AllHorses />} />
           <Route path="/horse-detail/:id" element={<HorseDetail />} />
+          <Route path="/all-clubs" element={<AllClubs />} />
+          <Route path="/club-detail/:id" element={<ClubDetail />} />
         </Routes>
       </Layout>
     </>

@@ -44,7 +44,6 @@ export const mockHorses: Horse[] = [
     age: 5,
     sex: "Gelding",
     club: "Kayseri Binicilik",
-
     imageUrl:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV2yHPLVlo21vgeEqnJBS5cBXjkHRI0MITobhiXq7xYtmceDUyKxXtWeY9GjhEPshEL3FnHpW-3E_iAnkKfmIFDw",
   },

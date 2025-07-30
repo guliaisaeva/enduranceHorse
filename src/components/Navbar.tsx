@@ -152,7 +152,7 @@ function Navbar() {
             {t("horses")}
           </Link>
           <Link
-            to="/clubs"
+            to="/all-clubs"
             className="pb-1 border-b-2 border-transparent hover:border-orange-500 transition duration-200"
           >
             {t("clubs")}

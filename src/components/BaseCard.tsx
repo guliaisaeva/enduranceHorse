@@ -1,7 +1,7 @@
 import React from "react";
 
 interface BaseCardProps {
-  imageUrl: string;
+  imageUrl: string | undefined;
   title: string;
   subtitle?: string;
   description?: string;
