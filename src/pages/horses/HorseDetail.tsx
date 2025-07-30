@@ -41,8 +41,8 @@ export default function HorseDetail() {
         At Bilgileri
       </h2>
 
-      <div className="flex flex-col md:flex-row items-start bg-white shadow-md rounded-lg p-6 gap-6">
-        <div className="flex items-center gap-4 w-full md:w-2/3">
+      <div className="flex flex-col md:flex-row items-center md:items-start bg-white shadow-md rounded-lg p-6 gap-6">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 w-full md:w-2/3 text-center md:text-left">
           <img
             src={
               horse.imageUrl && horse.imageUrl.trim() !== ""
@@ -54,23 +54,37 @@ export default function HorseDetail() {
           />
 
           <div>
-            <h1 className="text-2xl font-bold text-[#fea91d]">{horse.name}</h1>
-            <p className="text-gray-600">FEI ID: {horse.id}</p>
-            <p className="text-gray-600">Kulüp: {horse.club}</p>
-            <p className="text-gray-600">Branş: Endurance</p>
-            <p className="text-gray-600">horse: {horse.name}</p>
-            <p className="text-gray-600">Breed: {horse.breed}</p>
-            <p className="text-gray-600">Age: {horse.age}</p>
+            <h1 className="text-lg md:text-2xl font-bold text-[#fea91d]">
+              {horse.name}
+            </h1>
+            <p className="text-gray-600 text-justify text-sm md:text-base">
+              FEI ID: {horse.id}
+            </p>
+            <p className="text-gray-600 text-justify text-sm md:text-base">
+              Kulüp: {horse.club}
+            </p>
+            <p className="text-gray-600 text-justify text-sm md:text-base">
+              Branş: Endurance
+            </p>
+            <p className="text-gray-600 text-justify text-sm md:text-base">
+              horse: {horse.name}
+            </p>
+            <p className="text-gray-600 text-justify text-sm md:text-base">
+              Breed: {horse.breed}
+            </p>
+            <p className="text-gray-600 text-justify text-sm md:text-base">
+              Age: {horse.age}
+            </p>
           </div>
         </div>
 
-        <div className="w-full md:w-1/3 mt-6 md:mt-0">
+        <div className="w-full text-center md:text-left md:w-1/3 mt-6 md:mt-0">
           <h3 className="text-lg font-semibold text-[#118e6f] uppercase mb-2">
             Sıralama
           </h3>
           <ul className="text-gray-700 space-y-1 text-sm">
             <li>🌍 Dünya: 12. (1345 puan)</li>
-            <li className="flex justify-left items-center">
+            <li className="flex justify-center md:justify-start items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 60 60"
@@ -89,7 +103,7 @@ export default function HorseDetail() {
               </svg>
               Avrupa: 5. (1120 puan)
             </li>
-            <li className="flex justify-left items-center">
+            <li className="flex justify-left items-center justify-center md:justify-start">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 640 480"
@@ -123,8 +137,8 @@ export default function HorseDetail() {
           Son Yarış Geçmişi
         </h3>
         <div className="overflow-x-auto">
-          <table className="min-w-full border text-sm text-left text-gray-700">
-            <thead className="bg-gray-200 text-gray-700">
+          <table className="min-w-full border text-xs md:text-sm text-left text-gray-700">
+            <thead className="bg-gray-200 text-gray-700 text-xs md:text-sm">
               <tr>
                 <th className="px-4 py-2 border">Tarih</th>
                 <th className="px-4 py-2 border">Yarış İsmi</th>
@@ -136,31 +150,31 @@ export default function HorseDetail() {
             <tbody>
               {raceHistory.map((event, idx) => (
                 <tr key={idx} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border">{event.date}</td>
-                  <td className="px-4 py-2 border">{event.race}</td>
-                  <td className="px-4 py-2 border flex justify-between items-center gap-1">
-                    {event.horse} <FaInfoCircle color="#fea91d" />{" "}
+                  <td className="px-2 md:px-4 py-2 border">{event.date}</td>
+                  <td className="px-2 md:px-4 py-2 border">{event.race}</td>
+                  <td className="px-2 md:px-4 py-2 border flex justify-between items-center gap-1">
+                    {event.horse} <FaInfoCircle color="#fea91d" />
                   </td>
-                  <td className="px-4 py-2 border">{event.distance}</td>
-                  <td className="px-4 py-2 border">
+                  <td className="px-2 md:px-4 py-2 border">{event.distance}</td>
+                  <td className="px-2 md:px-4 py-2 border">
                     <span
-                      className={`px-2 py-1 text-xs font-semibold rounded 
-                          ${
-                            event.status.includes("Tamamlandı")
-                              ? "bg-green-100 text-green-800"
-                              : ""
-                          }
-                          ${
-                            event.status.includes("Diskalifiye")
-                              ? "bg-red-100 text-red-800"
-                              : ""
-                          }
-                          ${
-                            event.status.includes("sıra")
-                              ? "bg-yellow-100 text-yellow-800"
-                              : ""
-                          }
-                        `}
+                      className={`px-1 md:px-2 py-1 text-[10px] md:text-xs font-semibold rounded 
+                ${
+                  event.status.includes("Tamamlandı")
+                    ? "bg-green-100 text-green-800"
+                    : ""
+                }
+                ${
+                  event.status.includes("Diskalifiye")
+                    ? "bg-red-100 text-red-800"
+                    : ""
+                }
+                ${
+                  event.status.includes("sıra")
+                    ? "bg-yellow-100 text-yellow-800"
+                    : ""
+                }
+              `}
                     >
                       {event.status}
                     </span>

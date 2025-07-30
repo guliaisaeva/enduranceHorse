@@ -224,14 +224,14 @@ function Navbar() {
             {t("athletes")}
           </Link>
           <Link
-            to="/athlets"
+            to="/all-horses"
             onClick={toggleMenu}
             className="hover:text-orange-400"
           >
             {t("horses")}
           </Link>
           <Link
-            to="/clubs"
+            to="/all-clubs"
             onClick={toggleMenu}
             className="hover:text-orange-400"
           >

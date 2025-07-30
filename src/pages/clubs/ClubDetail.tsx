@@ -72,32 +72,58 @@ export default function ClubDetail() {
       <h3 className="text-lg font-semibold mb-2 text-center">
         ENDURANCE RESULTS
       </h3>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-gray-200 text-left">
-            <th className="p-2">Position</th>
-            <th className="p-2">Competition</th>
-            <th className="p-2">Horse</th>
-            <th className="p-2">Athlete</th>
-            <th className="p-2">Endurance Event</th>
-            <th className="p-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mockResults.map((result, idx) => (
-            <tr key={idx} className="border-b">
-              <td className="p-2">{result.position}</td>
-              <td className="p-2">{result.competition}</td>
-              <td className="p-2">{result.horse}</td>
-              <td className="p-2">{result.athlete}</td>
-              <td className="p-2">
-                {result.event} <br /> {result.date}
-              </td>
-              <td className="p-2">{result.status}</td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border text-xs md:text-sm text-left text-gray-700">
+          <thead className="bg-gray-200 text-gray-700 text-xs md:text-sm">
+            <tr>
+              <th className="px-2 md:px-4 py-2 border">Position</th>
+              <th className="px-2 md:px-4 py-2 border">Competition</th>
+              <th className="px-2 md:px-4 py-2 border">Horse</th>
+              <th className="px-2 md:px-4 py-2 border">Athlete</th>
+              <th className="px-2 md:px-4 py-2 border">Endurance Event</th>
+              <th className="px-2 md:px-4 py-2 border">Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {mockResults.map((result, idx) => (
+              <tr key={idx} className="hover:bg-gray-50">
+                <td className="px-2 md:px-4 py-2 border">{result.position}</td>
+                <td className="px-2 md:px-4 py-2 border">
+                  {result.competition}
+                </td>
+                <td className="px-2 md:px-4 py-2 border">{result.horse}</td>
+                <td className="px-2 md:px-4 py-2 border">{result.athlete}</td>
+                <td className="px-2 md:px-4 py-2 border">
+                  {result.event} <br /> {result.date}
+                </td>
+                <td className="px-2 md:px-4 py-2 border">
+                  <span
+                    className={`px-1 md:px-2 py-1 text-[10px] md:text-xs font-semibold rounded
+                ${
+                  result.status.includes("Qualified")
+                    ? "bg-green-100 text-green-800"
+                    : ""
+                }
+                ${
+                  result.status.includes("Eliminated")
+                    ? "bg-red-100 text-red-800"
+                    : ""
+                }
+                ${
+                  result.status.includes("Pending")
+                    ? "bg-yellow-100 text-yellow-800"
+                    : ""
+                }
+              `}
+                  >
+                    {result.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
