@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface BaseCardProps {
   imageUrl: string | undefined;
@@ -20,9 +21,11 @@ const BaseCard: React.FC<BaseCardProps> = ({
   tagText,
   tagColor = "bg-blue-700",
   bottomText,
-  buttonLabel = "View",
+  buttonLabel,
   onClick,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       onClick={onClick}
@@ -66,7 +69,7 @@ const BaseCard: React.FC<BaseCardProps> = ({
             onClick={onClick}
             className="bg-[#0DA27E] text-white py-1 px-6 rounded w-full hover:bg-[#0C936F] transition"
           >
-            {buttonLabel}
+            {buttonLabel || t("view")}
           </button>
         </div>
       </div>

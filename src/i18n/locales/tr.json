@@ -31,7 +31,7 @@
   "vetCard": "Vet Kartı",
 
   "noEventData": "Etkinlik bulunamadı",
-  "club": "Takım",
+  "club": "Kulüp",
   "status": "Durum",
   "timingVetCard": "Zamanlama / Vet Kartı",
   "noRiders": "Bu kategoride binici bulunmamaktadır",
@@ -52,6 +52,28 @@
   "qualifiedLabel": "Başarılı",
   "eliminatedLabel": "Elendi",
   "liveAlertsPanel": "Anlık Uyarılar Paneli",
-  "offRouteNotification": "Rota Dışı Bildirimi"
-
+  "offRouteNotification": "Rota Dışı Bildirimi",
+  "allAthletes": "Tüm Atletler",
+  "tag": "ATLET",
+  "athleteDetail": {
+    "notFound": "Atlet bulunamadı.",
+    "title": "Atlet Bilgileri",
+    "feiId": "FEI ID",
+    "club": "Kulüp",
+    "branch": "Branş",
+    "horse": "At",
+    "category": "Kategori",
+    "status": "Status",
+    "ranking": "Sıralama",
+    "world": "Dünya",
+    "europe": "Avrupa",
+    "turkey": "Türkiye",
+    "combination": "Kombinasyon",
+    "lastRaceHistory": "Son Yarış Geçmişi",
+    "date": "Tarih",
+    "raceName": "Yarış İsmi",
+    "horseName": "At ismi",
+    "km": "Km",
+    "result": "Durum / Timing"
+  }
 }

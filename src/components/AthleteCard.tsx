@@ -1,4 +1,5 @@
 import BaseCard from "./BaseCard";
+import { useTranslation } from "react-i18next";
 
 interface Athlete {
   name: string;
@@ -18,13 +19,15 @@ const AthleteCard = ({
   athlete: Athlete;
   onClick: () => void;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <BaseCard
       imageUrl={athlete.imageUrl || placeholderImage}
       title={`${athlete.name} ${athlete.countryFlag}`}
-      subtitle={`Kulüp: ${athlete.club}`}
-      description={`At: ${athlete.horse}`}
-      tagText="ATHLETE"
+      subtitle={`${t("club")}: ${athlete.club}`}
+      description={`${t("horse")}: ${athlete.horse}`}
+      tagText={t("tag")}
       tagColor="bg-green-700"
       bottomText={athlete.countryFlag}
       onClick={onClick}

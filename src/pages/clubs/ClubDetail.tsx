@@ -33,7 +33,7 @@ export default function ClubDetail() {
   return (
     <div className="max-w-7xl mx-auto p-4">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">
+        <h2 className="text-2xl font-bold text-[#118e6f]">
           {club.name} {club.countryFlag}
         </h2>
         <img
@@ -69,7 +69,7 @@ export default function ClubDetail() {
         )}
       </div>
 
-      <h3 className="text-lg font-semibold mb-2 text-center">
+      <h3 className="text-center text-lg font-semibold text-[#118e6f] uppercase mb-4">
         ENDURANCE RESULTS
       </h3>
       <div className="overflow-x-auto">

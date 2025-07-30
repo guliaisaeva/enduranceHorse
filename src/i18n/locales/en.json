@@ -52,5 +52,28 @@
   "qualifiedLabel": "Qualified",
   "eliminatedLabel": "Eliminated",
   "liveAlertsPanel": "Live Alerts Panel",
-  "offRouteNotification": "Off-Route Notification"
+  "offRouteNotification": "Off-Route Notification",
+  "allAthletes": "All Athletes",
+  "tag": "ATHLETE",
+  "athleteDetail": {
+    "notFound": "Athlete not found.",
+    "title": "Athlete Information",
+    "feiId": "FEI ID",
+    "club": "Club",
+    "branch": "Discipline",
+    "horse": "Horse",
+    "category": "Category",
+    "status": "Status",
+    "ranking": "Ranking",
+    "world": "World",
+    "europe": "Europe",
+    "turkey": "Turkey",
+    "combination": "Combination",
+    "lastRaceHistory": "Last Race History",
+    "date": "Date",
+    "raceName": "Race Name",
+    "horseName": "Horse Name",
+    "km": "Km",
+    "result": "Status / Timing"
+  }
 }
