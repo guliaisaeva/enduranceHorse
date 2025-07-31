@@ -59,11 +59,7 @@
     "notFound": "Atlet bulunamadı.",
     "title": "Atlet Bilgileri",
     "feiId": "FEI ID",
-    "club": "Kulüp",
     "branch": "Branş",
-    "horse": "At",
-    "category": "Kategori",
-    "status": "Status",
     "ranking": "Sıralama",
     "world": "Dünya",
     "europe": "Avrupa",
@@ -75,5 +71,16 @@
     "horseName": "At ismi",
     "km": "Km",
     "result": "Durum / Timing"
-  }
+  },
+  "allHorses": "Tüm Atlar",
+  "horseInfo": "At Bilgileri",
+  "breed": "Irk",
+  "age": "Yaş",
+  "allClubs": "Tüm Kulüpler",
+  "noHorseForClub": "Bu kulübe ait at bulunamadı.",
+  "enduranceResults": "Endurance Sonuçları",
+  "position": "Sıra",
+  "competition": "Yarışma",
+  "athlete": "Binici",
+  "enduranceEvent": "Endurance Etkinliği"
 }

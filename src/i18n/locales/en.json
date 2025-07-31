@@ -75,5 +75,16 @@
     "horseName": "Horse Name",
     "km": "Km",
     "result": "Status / Timing"
-  }
+  },
+  "allHorses": "All Horses",
+  "horseInfo": "Horse Information",
+  "breed": "Breed",
+  "age": "Age",
+  "allClubs": "All Clubs",
+  "noHorseForClub": "No horse found for this club.",
+  "enduranceResults": "Endurance Results",
+  "position": "Position",
+  "competition": "Competition",
+  "athlete": "Athlete",
+  "enduranceEvent": "Endurance Event"
 }

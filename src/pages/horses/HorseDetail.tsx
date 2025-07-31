@@ -1,14 +1,13 @@
 import { FaInfoCircle } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { mockHorses } from "./AllHorses";
+import { useTranslation } from "react-i18next";
 
 export default function HorseDetail() {
-  console.log("HorseDetail render oldu");
   const { id } = useParams();
   const horseId = parseInt(id || "", 10);
   const horse = mockHorses.find((h) => h.id === horseId);
-
-  console.log("horse.imageUrl:", horse?.imageUrl);
+  const { t } = useTranslation();
 
   if (!horse) return <div>At bulunamadı.</div>;
   const raceHistory = [
@@ -38,7 +37,7 @@ export default function HorseDetail() {
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2 className="text-center text-2xl font-bold text-[#118e6f] uppercase mb-8">
-        At Bilgileri
+        {t("horseInfo")}{" "}
       </h2>
 
       <div className="flex flex-col md:flex-row items-center md:items-start bg-white shadow-md rounded-lg p-6 gap-6">
@@ -58,32 +57,32 @@ export default function HorseDetail() {
               {horse.name}
             </h1>
             <p className="text-gray-600 text-justify text-sm md:text-base">
-              FEI ID: {horse.id}
+              {t("athleteDetail.feiId")}: {horse.id}
             </p>
             <p className="text-gray-600 text-justify text-sm md:text-base">
-              Kulüp: {horse.club}
+              {t("club")}: {horse.club}
             </p>
             <p className="text-gray-600 text-justify text-sm md:text-base">
-              Branş: Endurance
+              {t("athleteDetail.branch")}: Endurance
             </p>
             <p className="text-gray-600 text-justify text-sm md:text-base">
-              horse: {horse.name}
+              {t("horse")}: {horse.name}
             </p>
             <p className="text-gray-600 text-justify text-sm md:text-base">
-              Breed: {horse.breed}
+              {t("breed")}: {horse.breed}
             </p>
             <p className="text-gray-600 text-justify text-sm md:text-base">
-              Age: {horse.age}
+              {t("age")}: {horse.age}
             </p>
           </div>
         </div>
 
         <div className="w-full text-center md:text-left md:w-1/3 mt-6 md:mt-0">
           <h3 className="text-lg font-semibold text-[#118e6f] uppercase mb-2">
-            Sıralama
+            {t("athleteDetail.ranking")}
           </h3>
           <ul className="text-gray-700 space-y-1 text-sm">
-            <li>🌍 Dünya: 12. (1345 puan)</li>
+            <li>🌍 {t("athleteDetail.world")}: 12. (1345 puan)</li>
             <li className="flex justify-center md:justify-start items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +100,7 @@ export default function HorseDetail() {
                   ))}
                 </g>
               </svg>
-              Avrupa: 5. (1120 puan)
+              {t("athleteDetail.europe")}: 5. (1120 puan)
             </li>
             <li className="flex justify-left items-center justify-center md:justify-start">
               <svg
@@ -125,26 +124,32 @@ export default function HorseDetail() {
                   />
                 </g>
               </svg>
-              Türkiye: 1. (400 puan)
+              {t("athleteDetail.turkey")}: 1. (400 puan)
             </li>
-            <li>🤝 Kombinasyon: 7. (800 puan)</li>
+            <li>🤝{t("athleteDetail.combination")}: 7. (800 puan)</li>
           </ul>
         </div>
       </div>
 
       <div className="mt-12">
         <h3 className="text-center text-lg font-semibold text-[#118e6f] uppercase mb-4">
-          Son Yarış Geçmişi
+          {t("athleteDetail.lastRaceHistory")}{" "}
         </h3>
         <div className="overflow-x-auto">
           <table className="min-w-full border text-xs md:text-sm text-left text-gray-700">
             <thead className="bg-gray-200 text-gray-700 text-xs md:text-sm">
               <tr>
-                <th className="px-4 py-2 border">Tarih</th>
-                <th className="px-4 py-2 border">Yarış İsmi</th>
-                <th className="px-4 py-2 border">Binici ismi</th>
-                <th className="px-4 py-2 border">Km</th>
-                <th className="px-4 py-2 border">Durum / Timing</th>
+                <th className="px-4 py-2 border"> {t("athleteDetail.date")}</th>
+                <th className="px-4 py-2 border">
+                  {" "}
+                  {t("athleteDetail.raceName")}
+                </th>
+                <th className="px-4 py-2 border">{t("riderName")}</th>
+                <th className="px-4 py-2 border"> {t("athleteDetail.km")}</th>
+                <th className="px-4 py-2 border">
+                  {" "}
+                  {t("athleteDetail.result")}
+                </th>
               </tr>
             </thead>
             <tbody>

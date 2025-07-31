@@ -113,8 +113,8 @@ function ResultRiderList() {
         >
           {t("info")}
         </button>
-        {showInfoTable && <InfoSection />}
       </div>
+      {showInfoTable && <InfoSection />}
 
       <div className="flex justify-center md:justify-between text-sm text-gray-700 gap-2 flex-wrap m-0 md:m-8">
         <div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import BaseCard from "./BaseCard";
 
 interface Club {
@@ -8,15 +9,16 @@ interface Club {
 
 const placeholderImage =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoId6-Sw74IMOWpb4Qnd5dTFSOX_yIxKDWwDv6s9u1D4RwVKunYZ6dW34&s";
-
 const ClubCard = ({ club, onClick }: { club: Club; onClick: () => void }) => {
+  const { t } = useTranslation();
+
   return (
     <BaseCard
       imageUrl={club.imageUrl || placeholderImage}
       title={club.name}
       subtitle=""
       description=""
-      tagText="CLUB"
+      tagText={t("club")}
       tagColor="bg-blue-700"
       bottomText={club.countryFlag}
       onClick={onClick}

@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { FaInfoCircle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const raceHistory = [
   {
@@ -28,13 +29,14 @@ const raceHistory = [
 export default function AthleteDetail() {
   const location = useLocation();
   const rider = location.state;
+  const { t } = useTranslation();
 
-  if (!rider) return <div>Atlet bulunamadı.</div>;
+  if (!rider) return <div>{t("athleteDetail.notFound")}</div>;
 
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h2 className="text-center text-2xl font-bold text-[#118e6f] uppercase mb-8">
-        Atlet Bilgileri
+        {t("athleteDetail.title")}{" "}
       </h2>
 
       <div className="flex flex-col md:flex-row items-center md:items-start bg-white shadow-md rounded-lg p-6 gap-6">
@@ -51,32 +53,32 @@ export default function AthleteDetail() {
               {rider.name}
             </h1>
             <p className="text-gray-600 text-justify text-sm md:text-base">
-              FEI ID: {rider.id}
+              {t("athleteDetail.feiId")}: {rider.id}
             </p>
             <p className="text-gray-600 text-justify  text-sm md:text-base">
-              Kulüp: {rider.club}
+              {t("club")}: {rider.club}
             </p>
             <p className="text-gray-600 text-justify  text-sm md:text-base">
-              Branş: Endurance
+              {t("athleteDetail.branch")}: Endurance
             </p>
             <p className="text-gray-600 text-justify  text-sm md:text-base">
-              At: {rider.horse}
+              {t("horse")}: {rider.horse}
             </p>
             <p className="text-gray-600 text-justify  text-sm md:text-base">
-              Kategori: {rider.category}
+              {t("category")}: {rider.category}
             </p>
             <p className="text-gray-600 text-justify  text-sm md:text-base">
-              Status: {rider.km}km
+              Km: {rider.km}km
             </p>
           </div>
         </div>
 
         <div className="w-full text-center md:text-left md:w-1/3 mt-6 md:mt-0">
           <h3 className="text-lg font-semibold text-[#118e6f] uppercase mb-2">
-            Sıralama
+            {t("athleteDetail.ranking")}
           </h3>
           <ul className="text-gray-700 space-y-1 text-sm">
-            <li>🌍 Dünya: 12. (1345 puan)</li>
+            <li>🌍 {t("athleteDetail.world")}: 12. (1345 puan)</li>
             <li className="flex justify-center md:justify-start items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +96,7 @@ export default function AthleteDetail() {
                   ))}
                 </g>
               </svg>
-              Avrupa: 5. (1120 puan)
+              {t("athleteDetail.europe")}: 5. (1120 puan)
             </li>
             <li className="flex justify-left items-center justify-center md:justify-start">
               <svg
@@ -118,26 +120,36 @@ export default function AthleteDetail() {
                   />
                 </g>
               </svg>
-              Türkiye: 1. (400 puan)
+              {t("athleteDetail.turkey")}: 1. (400 puan)
             </li>
-            <li>🤝 Kombinasyon: 7. (800 puan)</li>
+            <li>🤝 {t("athleteDetail.combination")}: 7. (800 puan)</li>
           </ul>
         </div>
       </div>
 
       <div className="mt-12">
         <h3 className="text-center text-lg font-semibold text-[#118e6f] uppercase mb-4">
-          Son Yarış Geçmişi
+          {t("athleteDetail.lastRaceHistory")}{" "}
         </h3>
         <div className="overflow-x-auto">
           <table className="min-w-full border text-xs md:text-sm text-left text-gray-700">
             <thead className="bg-gray-200 text-gray-700 text-xs md:text-sm">
               <tr>
-                <th className="px-2 md:px-4 py-2 border">Tarih</th>
-                <th className="px-2 md:px-4 py-2 border">Yarış İsmi</th>
-                <th className="px-2 md:px-4 py-2 border">At ismi</th>
-                <th className="px-2 md:px-4 py-2 border">Km</th>
-                <th className="px-2 md:px-4 py-2 border">Durum / Timing</th>
+                <th className="px-2 md:px-4 py-2 border">
+                  {t("athleteDetail.date")}
+                </th>
+                <th className="px-2 md:px-4 py-2 border">
+                  {t("athleteDetail.raceName")}
+                </th>
+                <th className="px-2 md:px-4 py-2 border">
+                  {t("athleteDetail.horseName")}
+                </th>
+                <th className="px-2 md:px-4 py-2 border">
+                  {t("athleteDetail.km")}
+                </th>
+                <th className="px-2 md:px-4 py-2 border">
+                  {t("athleteDetail.result")}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -171,7 +183,7 @@ export default function AthleteDetail() {
                     >
                       {event.status}
                     </span>
-                  </td>gıt sttaus
+                  </td>
                 </tr>
               ))}
             </tbody>

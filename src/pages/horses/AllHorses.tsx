@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import HorseCard from "../../components/HorseCard";
+import { useTranslation } from "react-i18next";
 
 type Horse = {
   id: number;
@@ -74,11 +75,12 @@ export const mockHorses: Horse[] = [
 
 export default function AllHorses() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="max-w-7xl mx-auto p-4">
       <h2 className="text-center m-8 text-base md:text-lg text-[#118e6f] font-semibold uppercase">
-        Tüm Atletler
+        {t("allHorses")}{" "}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 mb-6">
@@ -94,7 +96,7 @@ export default function AllHorses() {
               sex: horse.sex,
             }}
             onClick={() => navigate(`/horse-detail/${horse.id}`)}
-            />
+          />
         ))}
       </div>
     </div>

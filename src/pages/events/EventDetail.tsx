@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const categories = [
   {
@@ -50,6 +51,7 @@ export default function EventDetail() {
   const dateObj = new Date(isoDateStr);
   const dayName = dateObj.toLocaleDateString("en-US", { weekday: "long" });
   const dayNum = dateObj.getDate();
+  const { t } = useTranslation();
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="text-center mb-6">
@@ -106,14 +108,13 @@ export default function EventDetail() {
             >
               <span className="font-medium">
                 {cat.name}
-
                 {event.status === "RESULT" && <span>({cat.count})</span>}
               </span>
 
               {event.status === "RESULT" && (
                 <div className="flex items-center gap-2">
                   <button className="bg-white text-xs text-gray-700 px-2 py-1 rounded">
-                    RESULTS
+                    {t("statusResult")}
                   </button>
                   <span className="bg-[#0e9978] text-xs px-2 py-1 rounded-full">
                     {cat.finished}

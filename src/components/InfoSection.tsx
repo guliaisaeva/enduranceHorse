@@ -38,7 +38,7 @@ function InfoSection() {
   const totalKm = mockData.reduce((sum, item) => sum + item.km, 0);
 
   return (
-    <div className="text-center m-6" >
+    <div className="text-center m-6">
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full text-sm text-left border">
           <thead className="bg-gray-100">

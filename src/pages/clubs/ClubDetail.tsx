@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import BaseCard from "../../components/BaseCard";
 import { mockHorses } from "../horses/AllHorses";
+import { useTranslation } from "react-i18next";
 
 const mockResults = [
   {
@@ -26,6 +27,7 @@ const mockResults = [
 export default function ClubDetail() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const club = location.state;
   const clubHorses = mockHorses.filter((horse) => horse.club === club.name);
@@ -53,7 +55,9 @@ export default function ClubDetail() {
                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAREAAAC4CAMAAADzLiguAAAAPFBMVEX///+rq6unp6fMzMykpKTp6enx8fHU1NS0tLS6urr6+vqwsLDHx8fPz8/w8PD19fXa2trh4eHl5eXAwMAzrysnAAADpklEQVR4nO2c2ZKDIBAAE6KJmsPr//91c69yKKREHav7dctl6YVhGJTdDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZqE5LMU1XbrvVupELUe9dO9t5PsFyZfuvY1FjWRL994GRnQeRs5NOj+rNpIVCzSMER2M6GBEByM6GNHBiI4cI+mhbdtLE12SFCO3XKnH36ryJnLDQoxU/xm2usZtWIaRWu1nUyLCSNnfh6moE0eEkYvqK4lavpBgpNA368ktYsMSjKSJbqSK2LAEI7VuRB0iNizBSGUYuURsWIIRc4zEXH8lGDkacSTm6YEEI7tMX2zKiA2LMFL185HAMJJWdcj2UIQRfZCEDJEyT5JkH7BcyzBSnrujJORY9r0BSPzXaxlGHv/pz5TJQoQUn4Mw5T1KhBi5x5LseUadnYJKRlcVPLLEGNkVt7qq0rASWtOZa7nno3KM/EB5/mGF2rSRvLdqe+Z1WzZy0Moq6ujz1IaNNJoQz1CyXSO9IPIeJD5ZyXaN6KXIJx6hZLNGKpuQ/Xl8A7BVI6nNx+MAbPTJjRopjAKCdyjZqJHWOmeeSsay+W0asQcRv1CySSM3t4/7IGmHH96ikW8JwKHkNPj0Fo3o2bvBYCiRayRt84u1a/WYkOHfK9bISam92lvW0qOZvRvzZqgwINXI+5zP0rd8dIgMHxwLNdI4+zYaRF643y6QaaT4nxlaxtXo538O3LJlGmk7fetlXKW9/ybuUCLSSC8l7WZchTt7N5S4QolEI1pK2sm4Tt5C7mPLEUoEGjH3tZ++OUoAjkHiKAwINGIWx86vHxTjmUhPib0wIM+IZV/7DpOhn/bZjyvEGbHOjGffQoLIG1thQJoRV3HsFhZEXqjWolyaEUdKqvLyl89hbYUBYUbcKWlYVP1i7p5lGfFOSb05G9JlGfHZ14ZhZiWijFwnF2IJJZKM1NP7eKCFEkFGLEfbk5D1sxJBRvz3tWFohQE5Rk6etaAflPQKA2KMpJFGyJNuYUCKkdJ1tD0JXfVSjFjfj5mMbigRYmToaHsSJf+FARlGftjXhvJ9j1GEEef7MdOhvu8xijASN4i8lXy+dJNgxPhOLw7vL80FGDnO4uN7FCbAyGx3xb0KA+s3cpntysnkGUpWb6Q8zcjjP7B6I7ODEZ1VGznfjrNzW7WRfbIA6zayFBjRWeWtxhU3X+vUi92Ofoh9CR0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMA2+AN7/TZH3Ls1kQAAAABJRU5ErkJggg=="
               }
               title={`${horse.name} ${horse.countryFlag}`}
-              subtitle={`${horse.age} yaş / ${horse.breed} / ${horse.sex}`}
+              subtitle={`${horse.age} ${t("age")} / ${horse.breed} / ${
+                horse.sex
+              }`}
               tagText={horse.sex}
               tagColor="bg-blue-600"
               bottomText={horse.countryFlag}
@@ -64,36 +68,54 @@ export default function ClubDetail() {
           ))
         ) : (
           <p className="col-span-5 text-center text-gray-500">
-            Bu kulübe ait at bulunamadı.
+            {t("noHorseForClub")}{" "}
           </p>
         )}
       </div>
 
       <h3 className="text-center text-lg font-semibold text-[#118e6f] uppercase mb-4">
-        ENDURANCE RESULTS
+        {t("enduranceResults")}{" "}
       </h3>
       <div className="overflow-x-auto">
         <table className="min-w-full border text-xs md:text-sm text-left text-gray-700">
           <thead className="bg-gray-200 text-gray-700 text-xs md:text-sm">
             <tr>
-              <th className="px-2 md:px-4 py-2 border">Position</th>
-              <th className="px-2 md:px-4 py-2 border">Competition</th>
-              <th className="px-2 md:px-4 py-2 border">Horse</th>
-              <th className="px-2 md:px-4 py-2 border">Athlete</th>
-              <th className="px-2 md:px-4 py-2 border">Endurance Event</th>
-              <th className="px-2 md:px-4 py-2 border">Status</th>
+              <th className="px-2 md:px-4 py-2 border capitalize">
+                {t("position")}
+              </th>
+              <th className="px-2 md:px-4 py-2 border capitalize">
+                {t("competition")}
+              </th>
+              <th className="px-2 md:px-4 py-2 border capitalize">
+                {t("horse")}
+              </th>
+              <th className="px-2 md:px-4 py-2 border capitalize">
+                {t("tag")}
+              </th>
+              <th className="px-2 md:px-4 py-2 border capitalize">
+                {t("enduranceEvent")}
+              </th>
+              <th className="px-2 md:px-4 py-2 border capitalize">
+                {t("status")}
+              </th>
             </tr>
           </thead>
           <tbody>
             {mockResults.map((result, idx) => (
               <tr key={idx} className="hover:bg-gray-50">
-                <td className="px-2 md:px-4 py-2 border">{result.position}</td>
-                <td className="px-2 md:px-4 py-2 border">
+                <td className="px-2 md:px-4 py-2 border capitalize">
+                  {result.position}
+                </td>
+                <td className="px-2 md:px-4 py-2 border capitalize">
                   {result.competition}
                 </td>
-                <td className="px-2 md:px-4 py-2 border">{result.horse}</td>
-                <td className="px-2 md:px-4 py-2 border">{result.athlete}</td>
-                <td className="px-2 md:px-4 py-2 border">
+                <td className="px-2 md:px-4 py-2 border capitalize">
+                  {result.horse}
+                </td>
+                <td className="px-2 md:px-4 py-2 border capitalize">
+                  {result.athlete}
+                </td>
+                <td className="px-2 md:px-4 py-2 border capitalize">
                   {result.event} <br /> {result.date}
                 </td>
                 <td className="px-2 md:px-4 py-2 border">
